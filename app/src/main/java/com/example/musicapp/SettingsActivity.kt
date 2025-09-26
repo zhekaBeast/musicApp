@@ -21,7 +21,7 @@ class SettingsActivity : ComponentActivity() {
             MusicAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Settings",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
