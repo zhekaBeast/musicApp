@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">musicApp</string>
+    <string name="app_name" translatable="false">musicApp</string>
+    <string name="hi_example">Привет!</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_favorite">FavoriteActivity</string>
+    <string name="title_activity_playlists">PlaylistsActivity</string>
 </resources>

@@ -4,10 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.Transition
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -17,14 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.musicapp.ui.theme.MusicAppTheme
 
-class MainActivity : ComponentActivity() {
+class FavoriteActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MusicAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(name = "Android",
+                    Greeting2(
+                        name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -32,18 +29,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
-fun TransitionPanel(
-    name: String,
-    icon: R.drawable,
-    modifier: Modifier = Modifier) {
-    Row(){
-    }
+fun Greeting2(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
 }
+
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun GreetingPreview3() {
     MusicAppTheme {
-        Greeting("Android")
+        Greeting2("Android")
     }
 }
