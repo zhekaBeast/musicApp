@@ -1,13 +1,23 @@
 <resources>
     <string name="app_name" translatable="false">musicApp</string>
     <string name="hi_example">Привет!</string>
-    <string name="title_activity_settings" translatable="false">SettingsActivity</string>
-    <string name="title_activity_favorite" translatable="false">FavoriteActivity</string>
-    <string name="title_activity_playlists" translatable="false">PlaylistsActivity</string>
     <string name="search">Поиск</string>
     <string name="favorite">Избранное</string>
     <string name="settings">Настройки</string>
     <string name="playlists">Плейлисты</string>
     <string name="AppName" translatable="false">MusicApp</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="home">Главная</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="write_to_support">Написать в поддержку</string>
+    <string name="share_the_app">Поделиться приложением</string>
+    <string name="user_agreement">Пользовательское соглашение</string>
+    <string name="user_agreement_url" translatable="false">https://practicum.yandex.ru</string>
+    <string name="share_app_message">ЭТО ПРИЛОЖЕНИЕ ПРОСТО КРЫШЕСНОС</string>
+    <string name="support_email" translatable="false">tarzhutkin@sfedu.ru</string>
+    <string name="email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="email_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="choose_browser">Выберите браузер</string>
+    <string name="choose_email_client">Выберите почтовый клиент</string>
+    <string name="clear_search">Очистить поиск</string>
 </resources>
