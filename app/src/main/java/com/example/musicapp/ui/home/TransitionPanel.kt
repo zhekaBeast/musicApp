@@ -1,4 +1,4 @@
-package com.example.musicapp.features.home
+package com.example.musicapp.ui.home
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

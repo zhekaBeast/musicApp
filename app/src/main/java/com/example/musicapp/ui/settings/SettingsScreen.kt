@@ -1,5 +1,6 @@
-package com.example.musicapp.features.settings
+package com.example.musicapp.ui.settings
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -56,18 +57,18 @@ fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifi
     }
 
 }
-private fun shareApp(context: android.content.Context) {
+private fun shareApp(context: Context) {
     val shareIntent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
+        setType("text/plain")
         putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
         putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_app_message))
     }
     context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_the_app)))
 }
 
-private fun sendEmailToSupport(context: android.content.Context) {
+private fun sendEmailToSupport(context: Context) {
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:")
+        setData(Uri.parse("mailto:"))
         putExtra(Intent.EXTRA_EMAIL, context.getString(R.string.support_email))
         putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
         putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_body))
@@ -75,7 +76,7 @@ private fun sendEmailToSupport(context: android.content.Context) {
     context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.choose_email_client)))
 }
 
-private fun openUserAgreement(context: android.content.Context) {
+private fun openUserAgreement(context: Context) {
     val agreementUrl = context.getString(R.string.user_agreement_url)
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(agreementUrl))
     context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_browser)))

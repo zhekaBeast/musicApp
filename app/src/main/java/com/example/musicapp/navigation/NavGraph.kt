@@ -5,10 +5,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.musicapp.features.favorite.FavoriteScreen
-import com.example.musicapp.features.home.HomeScreen
-import com.example.musicapp.features.search.SearchScreen
-import com.example.musicapp.features.settings.SettingsScreen
+import com.example.musicapp.ui.favorite.FavoriteScreen
+import com.example.musicapp.ui.home.HomeScreen
+import com.example.musicapp.ui.search.SearchScreen
+import com.example.musicapp.ui.settings.SettingsScreen
 
 @Composable
 fun NavGraph(

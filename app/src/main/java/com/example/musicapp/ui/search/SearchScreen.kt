@@ -1,4 +1,4 @@
-package com.example.musicapp.features.search
+package com.example.musicapp.ui.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

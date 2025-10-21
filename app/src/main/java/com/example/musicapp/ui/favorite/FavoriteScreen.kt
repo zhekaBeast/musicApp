@@ -1,4 +1,4 @@
-package com.example.musicapp.features.favorite
+package com.example.musicapp.ui.favorite
 
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController

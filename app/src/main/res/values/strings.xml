@@ -20,4 +20,5 @@
     <string name="choose_browser">Выберите браузер</string>
     <string name="choose_email_client">Выберите почтовый клиент</string>
     <string name="clear_search">Очистить поиск</string>
+    <string name="title_activity_track">TrackActivity</string>
 </resources>
