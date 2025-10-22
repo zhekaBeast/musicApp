@@ -1,4 +1,4 @@
-package com.example.musicapp.domain.MVVM
+package com.example.musicapp.domain.models
 
 data class TrackModel(
     val id: String,

@@ -1,7 +1,7 @@
-package com.example.musicapp.domain.api
+package com.example.musicapp.domain.repository
 
 import com.example.musicapp.data.dto.Track
 
-interface TrackSearchInteractor {
+interface TracksRepository {
     fun searchTracks(expression: String): List<Track>
 }
