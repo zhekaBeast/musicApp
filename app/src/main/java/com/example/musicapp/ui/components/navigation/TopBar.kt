@@ -59,7 +59,6 @@ fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
-                .background(color = Color.White)
         ) {
             IconButton(
                 onClick = {

@@ -1,4 +1,4 @@
-package com.example.musicapp.data.dto
+package com.example.musicapp.data.network
 
 data class Track (
     val trackName: String,

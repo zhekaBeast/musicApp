@@ -39,12 +39,14 @@ android {
     }
     buildToolsVersion = "34.0.0"
 }
-
 dependencies {
+    //Koin
+    implementation("io.insert-koin:koin-android:4.1.0")
+    implementation("io.insert-koin:koin-androidx-compose:4.1.0")
     // Compose
-    implementation("androidx.compose.ui:ui:1.5.4")
-    implementation("androidx.compose.material3:material3:1.1.2")
-    implementation("androidx.activity:activity-compose:1.8.0")
+    implementation(libs.androidx.compose.ui)
+    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation(libs.androidx.activity.compose)
     implementation("io.coil-kt:coil-compose:2.4.0")
     // Gson
     implementation("androidx.compose.material:material-icons-extended:1.5.4")

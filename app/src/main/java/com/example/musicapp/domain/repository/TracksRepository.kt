@@ -1,7 +1,7 @@
 package com.example.musicapp.domain.repository
 
-import com.example.musicapp.data.dto.Track
+import com.example.musicapp.data.network.Track
 
 interface TracksRepository {
-    fun searchTracks(expression: String): List<Track>
+    suspend fun SearchTracks(expression: String): List<Track>
 }
