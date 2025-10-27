@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.favorite
+package com.example.musicapp.ui.playlists
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +11,8 @@ import androidx.navigation.NavHostController
 import com.example.musicapp.R
 
 @Composable
-fun FavoriteScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun PlaylistsScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()){
-        Text(stringResource(R.string.favorite))
+        Text(stringResource(R.string.playlists))
     }
 }

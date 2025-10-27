@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.musicapp.ui.favorite.FavoriteScreen
 import com.example.musicapp.ui.home.HomeScreen
+import com.example.musicapp.ui.playlists.PlaylistsScreen
 import com.example.musicapp.ui.search.SearchScreen
 import com.example.musicapp.ui.settings.SettingsScreen
 
@@ -61,6 +62,13 @@ fun NavGraph(
         ) {
             EnterAnimation {
                 SettingsScreen(navController)
+            }
+        }
+        composable(
+            route = AppScreen.Playlists.route,
+        ) {
+            EnterAnimation {
+                PlaylistsScreen(navController)
             }
         }
         composable(
