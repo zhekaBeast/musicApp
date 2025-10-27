@@ -23,6 +23,7 @@ fun MainContainer() {
     LaunchedEffect(currentRoute) {
         isNavigating = false
     }
+    // TODO:корректно обработать нажатие кнопки назад
 //    BackHandler() {
 //        isNavigating=true
 //        Log.d("BackHandler","bh")
