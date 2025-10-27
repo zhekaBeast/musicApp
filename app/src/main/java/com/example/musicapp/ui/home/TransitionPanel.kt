@@ -30,7 +30,9 @@ fun TransitionPanel(
     Button(
         onClick = {
             onNavigate()
-            navController.navigate(appScreen.route)
+            navController.navigate(appScreen.route){
+                launchSingleTop = true
+            }
         },
         shape = RectangleShape,
         colors = ButtonDefaults.buttonColors(

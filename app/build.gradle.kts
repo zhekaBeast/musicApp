@@ -40,6 +40,7 @@ android {
     buildToolsVersion = "34.0.0"
 }
 dependencies {
+    implementation("io.github.raamcosta.compose-destinations:core:1.9.55")
     //Koin
     implementation("io.insert-koin:koin-android:4.1.0")
     implementation("io.insert-koin:koin-androidx-compose:4.1.0")
@@ -65,6 +66,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.mediation.test.suite)
+    implementation(libs.androidx.animation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

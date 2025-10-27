@@ -1,4 +1,4 @@
-package com.example.musicapp
+package com.example.musicapp.ui
 
 import android.app.Application
 import com.example.musicapp.di.repositoryModule

@@ -1,6 +1,15 @@
 package com.example.musicapp.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,19 +17,32 @@ import androidx.navigation.compose.composable
 import com.example.musicapp.ui.favorite.FavoriteScreen
 import com.example.musicapp.ui.home.HomeScreen
 import com.example.musicapp.ui.search.SearchScreen
-import com.example.musicapp.ui.search.SearchViewModel
 import com.example.musicapp.ui.settings.SettingsScreen
 
-private object ViewModelProvider {
-    fun getSearchViewModel(): SearchViewModel {
-        return org.koin.core.context.GlobalContext.get().get<SearchViewModel>()
+
+@Composable
+fun EnterAnimation(content: @Composable () -> Unit) {
+    AnimatedVisibility(
+        visibleState = MutableTransitionState(
+            initialState = false
+        ).apply { targetState = true },
+        modifier = Modifier,
+        enter = slideInVertically(
+            initialOffsetY = { -40 }
+        ) + expandVertically(
+            expandFrom = Alignment.Top
+        ) + fadeIn(initialAlpha = 0.3f),
+        exit = slideOutVertically() + shrinkVertically() + fadeOut(),
+    ) {
+        content()
     }
 }
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = AppScreen.Home.route,
+    onNavigate: ()->Unit = {},
+    startDestination: String = AppScreen.Home.route
 ) {
     NavHost(
         navController = navController,
@@ -30,26 +52,32 @@ fun NavGraph(
         composable(
             route = AppScreen.Home.route
         ) {
-            HomeScreen(navController)
+            EnterAnimation {
+                HomeScreen(navController, onNavigate)
+            }
         }
         composable(
-            route = AppScreen.Settings.route
+            route = AppScreen.Settings.route,
         ) {
-            SettingsScreen(navController)
+            EnterAnimation {
+                SettingsScreen(navController)
+            }
         }
         composable(
-            route = AppScreen.Favorite.route
+            route = AppScreen.Favorite.route,
+
         ) {
-            FavoriteScreen(navController)
+            EnterAnimation {
+                FavoriteScreen(navController)
+            }
         }
+
         composable(
             route = AppScreen.Search.route
         ) {
-            val searchViewModel: SearchViewModel = ViewModelProvider.getSearchViewModel()
-            SearchScreen(
-                navController,
-                searchViewModel
-            )
+            EnterAnimation {
+                SearchScreen(navController)
+            }
         }
 
     }

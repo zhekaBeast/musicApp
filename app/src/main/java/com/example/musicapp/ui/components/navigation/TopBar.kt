@@ -62,8 +62,8 @@ fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {
         ) {
             IconButton(
                 onClick = {
-                onNavigate()
-                navController.navigate(AppScreen.Home.route)
+                    onNavigate()
+                    navController.popBackStack()
             }) {
                 Icon(
                     tint = Color.Black,

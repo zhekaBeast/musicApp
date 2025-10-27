@@ -3,7 +3,6 @@ package com.example.musicapp.ui.settings
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,8 +15,9 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Support
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,14 +34,9 @@ import com.example.musicapp.R
 @Composable
 fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val appName = stringResource(R.string.app_name)
-    val shareTitle = stringResource(R.string.share_the_app)
-    val title = stringResource(R.string.write_to_support)
-    val user_agree = stringResource(R.string.user_agreement)
 
     Column(Modifier
-        .fillMaxSize()
-        .background(color = Color.White)) {
+        .fillMaxSize()) {
         Option(
             title = stringResource(id = R.string.share_the_app),
             icon = Icons.Default.Share,
@@ -69,7 +64,7 @@ private fun shareApp(context: Context) {
 private fun sendEmailToSupport(context: Context) {
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
         setData(Uri.parse("mailto:"))
-        putExtra(Intent.EXTRA_EMAIL, context.getString(R.string.support_email))
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(context.getString(R.string.support_email)))
         putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
         putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_body))
     }
@@ -87,11 +82,9 @@ fun Option(title: String, icon: ImageVector, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         shape = RectangleShape,
-        colors = ButtonColors(
-            containerColor = Color.White,
-            contentColor = Color.Black,
-            disabledContainerColor = Color.LightGray,
-            disabledContentColor = Color.DarkGray
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground
         )
     ) {
         Row(
