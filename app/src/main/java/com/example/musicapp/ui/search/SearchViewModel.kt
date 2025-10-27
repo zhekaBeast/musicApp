@@ -15,7 +15,7 @@ class SearchViewModel(
 ) : ViewModel() {
 
     //...
-    private val _allTracksScreenState = MutableStateFlow<SearchState>(SearchState.Loading)
+    private val _allTracksScreenState = MutableStateFlow<SearchState>(SearchState.Initial)
     val allTracksScreenState = _allTracksScreenState.asStateFlow()
 
     fun fetchData(expression: String) {
