@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Experimental code
+app/src/main/java/com/example/musicapp/playingAround/

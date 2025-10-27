@@ -37,10 +37,22 @@ android {
     buildFeatures {
         compose = true
     }
+    buildToolsVersion = "34.0.0"
 }
-
 dependencies {
-
+    implementation("io.github.raamcosta.compose-destinations:core:1.9.55")
+    //Koin
+    implementation("io.insert-koin:koin-android:4.1.0")
+    implementation("io.insert-koin:koin-androidx-compose:4.1.0")
+    // Compose
+    implementation(libs.androidx.compose.ui)
+    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation(libs.androidx.activity.compose)
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    // Gson
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation("androidx.navigation:navigation-compose:2.9.5")
+    implementation("com.google.code.gson:gson:2.13.2")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -49,6 +61,12 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.mediation.test.suite)
+    implementation(libs.androidx.animation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
