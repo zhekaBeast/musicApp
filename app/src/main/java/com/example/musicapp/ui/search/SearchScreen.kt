@@ -47,16 +47,19 @@ fun SearchScreen(navController: NavHostController) {
     SearchScreenContent(
         fetchSearchSong = viewModel::fetchData,
         searchState = searchState,
+        resetSearchState = viewModel::resetState
     )
 }
 
 
 @Composable
-internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState: SearchState) {
+internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState: SearchState, resetSearchState: () -> Unit ) {
     var text by remember { mutableStateOf("") }
     LaunchedEffect(text) {
         delay(500)
-        if (text.isNotBlank()) {
+        if (text.isBlank()){
+            resetSearchState()
+        }else {
             fetchSearchSong(text)
         }
     }
@@ -77,6 +80,7 @@ internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState:
             value = text,
             onValueChange = {
                 text = it
+                resetSearchState()
             },
             leadingIcon = {
                 Icon(

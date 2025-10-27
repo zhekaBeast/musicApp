@@ -61,6 +61,8 @@ class Storage {
             it.trackName
                 .lowercase()
                 .contains(request.lowercase())
+                    || it.artistName.lowercase()
+                        .contains(request.lowercase())
         }
         return result
     }
