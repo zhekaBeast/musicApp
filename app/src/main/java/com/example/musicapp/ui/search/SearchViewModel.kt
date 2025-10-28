@@ -1,5 +1,6 @@
 package com.example.musicapp.ui.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapp.domain.repository.TracksRepository
@@ -28,5 +29,10 @@ class SearchViewModel(
                 _allTracksScreenState.update { SearchState.Error(e.message.toString()) }
             }
         }
+    }
+
+    fun resetState() {
+        Log.d("ResetState","reseted")
+        _allTracksScreenState.update { SearchState.Initial }
     }
 }
