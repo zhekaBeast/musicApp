@@ -20,7 +20,7 @@ enum class AppScreen(
         titleId = R.string.home
     ),
     Playlists(
-        route = "Playlists",
+        route = "playlists",
         icon = Icons.Default.LibraryMusic,
         titleId = R.string.playlists
     ),
@@ -40,7 +40,22 @@ enum class AppScreen(
         route = "favorite",
         icon = Icons.Default.Favorite,
         titleId = R.string.favorite
+    ),
+    NewPlaylist(
+        route = "newPlaylist",
+        icon = Icons.Default.Home,
+        titleId = R.string.home
+    ),
 
+    Playlist(
+        route = "playlist/{playlistId}",
+        icon = Icons.Default.Home,
+        titleId = R.string.home
+    ),
+
+    Null(
+        route = "",
+        icon = Icons.Default.Home,
+        titleId = R.string.home
     )
-
 }

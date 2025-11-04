@@ -28,51 +28,55 @@ import com.example.musicapp.navigation.AppScreen
 fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    when(currentDestination?.route){
+        AppScreen.Home.route->{
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .background(color = Color.Blue)
+                    .padding(top = 16.dp)
+            ) {
+                Text(
+                    stringResource(R.string.AppName), modifier = Modifier
+                        .padding(start = 24.dp)
+                        .align(Alignment.CenterVertically),
+                    style = TextStyle(
+                        fontSize = 22.sp,
+                        color = Color.White
+                    )
 
-    if (currentDestination?.route == AppScreen.Home.route) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-                .background(color = Color.Blue)
-                .padding(top = 16.dp)
-        ) {
-            Text(
-                stringResource(R.string.AppName), modifier = Modifier
-                    .padding(start = 24.dp)
-                    .align(Alignment.CenterVertically),
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    color = Color.White
-                )
-
-            )
-        }
-    } else {
-        val appScreen = when (currentDestination?.route) {
-            AppScreen.Settings.route -> AppScreen.Settings
-            AppScreen.Search.route -> AppScreen.Search
-            else -> AppScreen.Settings
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        ) {
-            IconButton(
-                onClick = {
-                    onNavigate()
-                    navController.popBackStack()
-            }) {
-                Icon(
-                    tint = Color.Black,
-                    contentDescription = stringResource(appScreen.titleId),
-                    imageVector = Icons.Default.ArrowBack
                 )
             }
-            Text(stringResource(appScreen.titleId), style = TextStyle(fontSize = 22.sp),
-                modifier = Modifier.padding(start=12.dp).padding(vertical = 10.dp))
+        }
+        else -> {
+            val appScreen = when (currentDestination?.route) {
+                AppScreen.Search.route -> AppScreen.Search
+                AppScreen.Settings.route -> AppScreen.Settings
+                AppScreen.Playlists.route -> AppScreen.Playlists
+                else -> AppScreen.Null
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+                    .background(color = Color.Gray)
+            ) {
+                IconButton(
+                    onClick = {
+                        onNavigate()
+                        navController.popBackStack()
+                    }) {
+                    Icon(
+                        tint = Color.Black,
+                        contentDescription = stringResource(appScreen.titleId),
+                        imageVector = Icons.Default.ArrowBack
+                    )
+                }
+                Text(stringResource(appScreen.titleId), style = TextStyle(fontSize = 22.sp),
+                    modifier = Modifier.padding(start=12.dp).padding(vertical = 10.dp))
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 class SearchViewModel(
-    private val tracksRepository: TracksRepository,
+    private val tracksRepository: TracksRepository
 ) : ViewModel() {
 
     //...

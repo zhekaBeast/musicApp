@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.musicapp.ui.favorite.FavoriteScreen
 import com.example.musicapp.ui.home.HomeScreen
+import com.example.musicapp.ui.newPlaylist.NewPlaylistScreen
+import com.example.musicapp.ui.playlist.PlaylistScreen
 import com.example.musicapp.ui.playlists.PlaylistsScreen
 import com.example.musicapp.ui.search.SearchScreen
 import com.example.musicapp.ui.settings.SettingsScreen
@@ -85,6 +87,31 @@ fun NavGraph(
         ) {
             EnterAnimation {
                 SearchScreen(navController)
+            }
+        }
+
+        composable(
+            route = AppScreen.NewPlaylist.route
+        ) {
+            EnterAnimation {
+                NewPlaylistScreen()
+            }
+        }
+
+        composable(
+            route = AppScreen.NewPlaylist.route
+        ) {
+            EnterAnimation {
+                NewPlaylistScreen()
+            }
+        }
+
+        composable(
+            route = AppScreen.Playlist.route
+        ) { navBackStackEntry  ->
+            val playlistId = navBackStackEntry.arguments?.getString("playlistId")
+            EnterAnimation {
+                PlaylistScreen(playlistId = playlistId?.toLongOrNull())
             }
         }
 

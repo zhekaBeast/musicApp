@@ -1,9 +1,9 @@
-package com.example.musicapp.data.network
+package com.example.musicapp.data.datasource.remote.retrofit
 
-import com.example.musicapp.creator.Storage
-import com.example.musicapp.data.NetworkClient
-import com.example.musicapp.data.dto.BaseResponse
-import com.example.musicapp.data.dto.TracksSearchResponse
+import com.example.musicapp.data.datasource.remote.mock.Storage
+import com.example.musicapp.data.datasource.remote.api.NetworkClient
+import com.example.musicapp.data.datasource.remote.dto.BaseResponse
+import com.example.musicapp.data.datasource.remote.dto.TracksSearchResponse
 import kotlinx.coroutines.delay
 
 class RetrofitNetworkClient(val storage: Storage): NetworkClient {

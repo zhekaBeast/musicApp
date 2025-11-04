@@ -21,4 +21,5 @@
     <string name="choose_email_client">Выберите почтовый клиент</string>
     <string name="clear_search">Очистить поиск</string>
     <string name="title_activity_track">TrackActivity</string>
+    <string name="add_playlist">Добавить плейлист</string>
 </resources>

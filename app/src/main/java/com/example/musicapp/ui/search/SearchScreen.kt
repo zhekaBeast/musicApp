@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
-import com.example.musicapp.data.network.Track
+import com.example.musicapp.data.datasource.remote.dto.Track
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
