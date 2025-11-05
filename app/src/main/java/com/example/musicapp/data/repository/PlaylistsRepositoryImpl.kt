@@ -6,8 +6,8 @@ import com.example.musicapp.domain.repository.PlaylistsRepository
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistsRepositoryImpl(
+    private val db: DatabaseMock
 ) : PlaylistsRepository {
-    private val db = DatabaseMock()
     override fun getPlaylist(id: Long): Flow<Playlist?> {
         return db.getPlaylist(id)
     }

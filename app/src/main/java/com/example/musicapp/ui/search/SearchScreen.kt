@@ -1,5 +1,6 @@
 package com.example.musicapp.ui.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
 import com.example.musicapp.data.datasource.remote.dto.Track
+import com.example.musicapp.navigation.createTrackDetailsRoute
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
@@ -47,13 +49,19 @@ fun SearchScreen(navController: NavHostController) {
     SearchScreenContent(
         fetchSearchSong = viewModel::fetchData,
         searchState = searchState,
-        resetSearchState = viewModel::resetState
+        resetSearchState = viewModel::resetState,
+        navController = navController
     )
 }
 
 
 @Composable
-internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState: SearchState, resetSearchState: () -> Unit ) {
+internal fun SearchScreenContent(
+    fetchSearchSong: (String) -> Unit,
+    searchState: SearchState,
+    resetSearchState: () -> Unit,
+    navController: NavHostController
+) {
     var text by remember { mutableStateOf("") }
     LaunchedEffect(text) {
         delay(500)
@@ -128,7 +136,7 @@ internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState:
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(count = tracks.size) { index ->
-                        TrackListItem(track = tracks[index])
+                        TrackListItem(track = tracks[index], navController = navController)
                         HorizontalDivider(thickness = 0.5.dp)
                     }
                 }
@@ -139,8 +147,13 @@ internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState:
 
 
 @Composable
-fun TrackListItem(track: Track) {
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+fun TrackListItem(track: Track, navController: NavHostController) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                onClick = {navController.navigate(createTrackDetailsRoute(track.id))}
+            ), verticalAlignment = Alignment.CenterVertically) {
         IconButton(
             onClick = {},
             content = {

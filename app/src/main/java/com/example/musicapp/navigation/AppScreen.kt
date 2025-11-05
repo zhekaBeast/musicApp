@@ -9,11 +9,15 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.musicapp.R
 
+
+fun createTrackDetailsRoute(trackId: Long) = "trackDetails/$trackId"
+fun createPlaylistRoute(playlistId: Long) = "playlist/$playlistId"
 enum class AppScreen(
     val route: String,
     val icon: ImageVector,
     val titleId: Int
 ) {
+
     Home(
         route = "home",
         icon = Icons.Default.Home,
@@ -49,6 +53,12 @@ enum class AppScreen(
 
     Playlist(
         route = "playlist/{playlistId}",
+        icon = Icons.Default.Home,
+        titleId = R.string.home
+    ),
+
+    TrackDetails(
+        route = "trackDetails/{trackId}",
         icon = Icons.Default.Home,
         titleId = R.string.home
     ),

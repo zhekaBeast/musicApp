@@ -50,8 +50,8 @@ class DatabaseMock() {
         playlists.removeIf { it.id == id }
     }
 
-    fun getTrackByNameAndArtist(track: Track): Flow<Track?> = flow {
-        emit(tracks.find { it.trackName == track.trackName && it.artistName == track.artistName })
+    fun getTrackById(trackId: Long): Track?{
+        return tracks.find { it.id == trackId}
     }
 
     fun insertTrack(track: Track) {

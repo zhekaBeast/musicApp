@@ -14,6 +14,6 @@ val repositoryModule = module {
         TracksRepositoryImpl(RetrofitNetworkClient(Storage()), DatabaseMock())
     }
     single<PlaylistsRepository> {
-        PlaylistsRepositoryImpl()
+        PlaylistsRepositoryImpl(DatabaseMock())
     }
 }

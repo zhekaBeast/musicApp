@@ -24,8 +24,8 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient, private val
         }
     }
 
-    override fun getTrackByNameAndArtist(track: Track): Flow<Track?> {
-        return db.getTrackByNameAndArtist(track)
+    override fun getTrackById(trackId: Long): Track? {
+        return db.getTrackById(trackId)
     }
     fun getPlaylist(id: Long): Flow<Playlist?>{
         return db.getPlaylist(id)
@@ -35,17 +35,15 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient, private val
     }
 
     override suspend fun insertSongToPlaylist(
-        track: Track,
+        trackId: Long,
         playlistId: Long
     ) {
-        db.insertSongToPlaylist(track, playlistId)
+        db.insertSongToPlaylist(trackId, playlistId)
     }
 
     override suspend fun deleteSongFromPlaylist(trackId: Long, playlistId: Long) {
         db.deleteSongFromPlaylist(trackId, playlistId)
     }
-
-
 
     override suspend fun updateFavoriteStatus(id: Long, favorite: Boolean) {
         db.updateFavoriteStatus(id, favorite)

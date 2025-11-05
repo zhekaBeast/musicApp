@@ -21,6 +21,7 @@ import com.example.musicapp.ui.playlist.PlaylistScreen
 import com.example.musicapp.ui.playlists.PlaylistsScreen
 import com.example.musicapp.ui.search.SearchScreen
 import com.example.musicapp.ui.settings.SettingsScreen
+import com.example.musicapp.ui.trackDetails.TrackDetailsScreen
 
 
 @Composable
@@ -115,5 +116,13 @@ fun NavGraph(
             }
         }
 
+        composable(
+            route = AppScreen.TrackDetails.route
+        ) { navBackStackEntry  ->
+            val trackId = navBackStackEntry.arguments?.getString("trackId")
+            EnterAnimation {
+                TrackDetailsScreen(trackId = trackId?.toLongOrNull())
+            }
+        }
     }
 }

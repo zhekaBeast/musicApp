@@ -23,9 +23,9 @@ class PlaylistViewModel(
         }
     }
 
-    fun insertSongToPlaylist(track: Track, playlistId: Long) {
+    fun insertSongToPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            tracksRepository.insertSongToPlaylist(track, playlistId)
+            tracksRepository.insertSongToPlaylist(track.id, playlist.id)
         }
     }
 
@@ -35,16 +35,16 @@ class PlaylistViewModel(
         }
     }
 
-    fun deleteSongFromPlaylist(trackId: Long, playlistId: Long) {
+    fun deleteSongFromPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            tracksRepository.deleteSongFromPlaylist(trackId, playlistId)
+            tracksRepository.deleteSongFromPlaylist(track.id, playlist.id)
         }
     }
 
-    fun deletePlaylistById(id: Long) {
+    fun deletePlaylist(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-        playlistsRepository.deletePlaylistById(id)
+        playlistsRepository.deletePlaylistById(playlist.id)
             }
     }
 }
