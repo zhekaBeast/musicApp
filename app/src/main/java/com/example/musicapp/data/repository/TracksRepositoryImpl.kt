@@ -1,10 +1,10 @@
 package com.example.musicapp.data.repository
 
-import com.example.musicapp.data.datasource.remote.api.NetworkClient
-import com.example.musicapp.data.datasource.remote.dto.Playlist
-import com.example.musicapp.data.datasource.remote.dto.Track
-import com.example.musicapp.data.datasource.remote.dto.TracksSearchResponse
-import com.example.musicapp.data.datasource.remote.mock.DatabaseMock
+import com.example.musicapp.data.datasource.api.NetworkClient
+import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.data.datasource.dto.Track
+import com.example.musicapp.data.datasource.dto.TracksSearchResponse
+import com.example.musicapp.data.datasource.mock.DatabaseMock
 import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -34,16 +34,7 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient, private val
         return db.getFavoriteTracks()
     }
 
-    override suspend fun insertSongToPlaylist(
-        trackId: Long,
-        playlistId: Long
-    ) {
-        db.insertSongToPlaylist(trackId, playlistId)
-    }
 
-    override suspend fun deleteSongFromPlaylist(trackId: Long, playlistId: Long) {
-        db.deleteSongFromPlaylist(trackId, playlistId)
-    }
 
     override suspend fun updateFavoriteStatus(id: Long, favorite: Boolean) {
         db.updateFavoriteStatus(id, favorite)

@@ -22,4 +22,11 @@
     <string name="clear_search">Очистить поиск</string>
     <string name="title_activity_track">TrackActivity</string>
     <string name="add_playlist">Добавить плейлист</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="track_not_found">Трек не найден</string>
+    <string name="back">Назад</string>
+    <string name="playlist_name">Название*</string>
+    <string name="playlist_description">Описание</string>
+    <string name="add_track_to_playlist">Добавить трек в плейлист</string>
+    <string name="add_track_to_favorite">Добавить трек в избранное</string>
 </resources>

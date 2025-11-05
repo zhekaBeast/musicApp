@@ -1,17 +1,21 @@
-package com.example.musicapp.data.datasource.remote.mock
+package com.example.musicapp.data.datasource.mock
 
-import com.example.musicapp.data.datasource.remote.dto.Playlist
-import com.example.musicapp.data.datasource.remote.dto.Track
+import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.data.datasource.dto.Track
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 
-class DatabaseMock() {
+
+class DatabaseMock(storage: Storage) {
+
+
     private val historyList = mutableListOf<String>()
     private val _historyUpdates = MutableSharedFlow<Unit>()
     private val playlists = mutableListOf<Playlist>()
-    private val tracks = mutableListOf<Track>()
+
+    private val tracks = storage.getAllTracks().toMutableList<Track>()
 
     fun getPlaylist(id: Long): Flow<Playlist?> = flow {
         delay(500)

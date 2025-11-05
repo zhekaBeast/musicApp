@@ -31,14 +31,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
-import com.example.musicapp.data.datasource.remote.dto.Track
+import com.example.musicapp.data.datasource.dto.Track
 import com.example.musicapp.navigation.createTrackDetailsRoute
+import com.example.musicapp.ui.components.common.DisplayError
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
@@ -113,12 +113,8 @@ internal fun SearchScreenContent(
         )
         when (val state = searchState) {
             is SearchState.Error -> {
-                val error = state.error
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Ошибка: $error", color = Color.Red)
-                }
+                DisplayError.displayErrorScreen(state.error)
             }
-
             SearchState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()

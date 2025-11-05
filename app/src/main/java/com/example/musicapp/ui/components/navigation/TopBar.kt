@@ -70,12 +70,16 @@ fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {
                     }) {
                     Icon(
                         tint = Color.Black,
-                        contentDescription = stringResource(appScreen.titleId),
+                        contentDescription = stringResource(R.string.back),
                         imageVector = Icons.Default.ArrowBack
                     )
                 }
-                Text(stringResource(appScreen.titleId), style = TextStyle(fontSize = 22.sp),
-                    modifier = Modifier.padding(start=12.dp).padding(vertical = 10.dp))
+                if(appScreen.showTitle) {
+                    Text(
+                        stringResource(appScreen.titleId), style = TextStyle(fontSize = 22.sp),
+                        modifier = Modifier.padding(start = 12.dp).padding(vertical = 10.dp)
+                    )
+                }
             }
         }
     }

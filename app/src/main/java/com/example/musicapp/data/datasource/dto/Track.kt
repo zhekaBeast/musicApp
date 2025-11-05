@@ -1,4 +1,4 @@
-package com.example.musicapp.data.datasource.remote.dto
+package com.example.musicapp.data.datasource.dto
 
 data class Track (
     val id: Long = 0,

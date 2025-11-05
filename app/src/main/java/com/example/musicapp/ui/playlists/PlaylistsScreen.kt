@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
-import com.example.musicapp.data.datasource.remote.dto.Playlist
+import com.example.musicapp.data.datasource.dto.Playlist
 import com.example.musicapp.navigation.AppScreen
 import org.koin.compose.koinInject
 
@@ -40,7 +40,7 @@ fun PlaylistsScreen(navController: NavHostController, modifier: Modifier = Modif
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()){
         Text(stringResource(R.string.playlists))
     }
-    val viewModel: PlaylistViewModel = koinInject()
+    val viewModel: PlaylistsViewModel = koinInject()
     val playlists by viewModel.playlists.collectAsState(emptyList())
     Box(modifier = Modifier.fillMaxSize()) {
         Column(

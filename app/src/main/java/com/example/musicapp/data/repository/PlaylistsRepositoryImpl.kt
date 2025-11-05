@@ -1,7 +1,7 @@
 package com.example.musicapp.data.repository
 
-import com.example.musicapp.data.datasource.remote.dto.Playlist
-import com.example.musicapp.data.datasource.remote.mock.DatabaseMock
+import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.data.datasource.mock.DatabaseMock
 import com.example.musicapp.domain.repository.PlaylistsRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -22,6 +22,17 @@ class PlaylistsRepositoryImpl(
 
     override suspend fun deletePlaylistById(id: Long) {
         db.deletePlaylistById(id)
+    }
+
+    override suspend fun insertSongToPlaylist(
+        trackId: Long,
+        playlistId: Long
+    ) {
+        db.insertSongToPlaylist(trackId, playlistId)
+    }
+
+    override suspend fun deleteSongFromPlaylist(trackId: Long, playlistId: Long) {
+        db.deleteSongFromPlaylist(trackId, playlistId)
     }
 
 }

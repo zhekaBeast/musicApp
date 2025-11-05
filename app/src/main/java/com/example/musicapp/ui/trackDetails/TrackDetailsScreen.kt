@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,9 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.musicapp.data.datasource.remote.dto.Track
+import com.example.musicapp.R
+import com.example.musicapp.data.datasource.dto.Track
+import com.example.musicapp.ui.components.common.DisplayError
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
@@ -31,8 +35,10 @@ fun TrackDetailsScreen(trackId: Long?) {
 
 @Composable
 private fun TrackDetailsScreenContent(
-    state: TrackDetailsState,
-    loadTrack: (Long) -> Unit,
+    trackDetailsState: TrackDetailsState,
+    loadTrack: (id:Long) -> Unit,
+    addTrackToFavorite: (id:Long) -> Unit,
+    addTrackToPlaylist: (trackId:Long, playlistId:Long) -> Unit,
     trackId: Long
 ) {
     LaunchedEffect(text) {
@@ -40,10 +46,9 @@ private fun TrackDetailsScreenContent(
         loadTrack(trackId)
     }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        when (state) {
+        when (val state = trackDetailsState) {
             is TrackDetailsState.Error -> {
-                val error = state.error
-                Text("Ошибка: $error", color = Color.Red)
+                DisplayError.displayErrorScreen(state.error)
             }
 
             TrackDetailsState.Loading -> {
@@ -54,7 +59,9 @@ private fun TrackDetailsScreenContent(
             }
 
             is TrackDetailsState.Success -> {
-                TrackDetails(state.foundTrack)
+                TrackDetails(state.foundTrack,
+                    addTrackToFavorite,
+                    addTrackToPlaylist)
             }
         }
     }
@@ -62,9 +69,12 @@ private fun TrackDetailsScreenContent(
 
 
 @Composable
-private fun TrackDetails(track: Track?) {
+private fun TrackDetails(track: Track?,
+                         addTrackToFavorite: (id:Long) -> Unit,
+                         addTrackToPlaylist: (trackId:Long, playlistId:Long) -> Unit
+) {
     if (track == null) {
-        Text("TODO:написать текст")//TODO
+        Text(stringResource(R.string.track_not_found))
     } else {
         Column(
             modifier = Modifier
@@ -75,6 +85,9 @@ private fun TrackDetails(track: Track?) {
             Text(track.trackName)
             Text(track.artistName)
             Text(track.trackTime)
+            Button() {Text(R.string.add_track_to_playlist) }
+            Button(onClick = ) {Text(R.string.add_track_to_favorite) }
+
         }
     }
 }

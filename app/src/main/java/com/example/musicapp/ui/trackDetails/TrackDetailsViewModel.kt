@@ -1,7 +1,7 @@
 package com.example.musicapp.ui.trackDetails
 
 import androidx.lifecycle.ViewModel
-import com.example.musicapp.data.datasource.remote.dto.Track
+import com.example.musicapp.data.datasource.dto.Track
 import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
