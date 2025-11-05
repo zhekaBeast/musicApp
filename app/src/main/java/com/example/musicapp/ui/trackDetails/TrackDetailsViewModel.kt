@@ -1,11 +1,13 @@
 package com.example.musicapp.ui.trackDetails
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.musicapp.data.datasource.dto.Track
 import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 class TrackDetailsViewModel(val tracksRepository: TracksRepository): ViewModel() {
@@ -15,16 +17,44 @@ class TrackDetailsViewModel(val tracksRepository: TracksRepository): ViewModel()
         try {
             _trackState.update { TrackDetailsState.Loading }
             val track = tracksRepository.getTrackById(trackId = trackId)
-            _trackState.update { TrackDetailsState.Success(track) }
+            if(track==null) {
+                _trackState.update { TrackDetailsState.NotFound }
+            } else{
+                _trackState.update { TrackDetailsState.Success(track) }
+            }
         }catch (e: IOException){
             _trackState.update {TrackDetailsState.Error(e.message.toString())}
         }
     }
+
+    fun toggleFavorite(track:Track, trackId: Long){
+        val currentState = _trackState.value
+        if (currentState is TrackDetailsState.Success) {
+            viewModelScope.launch {
+                try {
+                    _trackState.update { TrackDetailsState.Loading }
+                    val updatedTrack = tracksRepository.updateFavoriteStatus(currentState.foundTrack!!.id,
+                        !currentState.foundTrack.favorite)
+                    if(updatedTrack==null) {
+                        _trackState.update { TrackDetailsState.NotFound }
+                    } else{
+                        _trackState.update { TrackDetailsState.Success(updatedTrack) }
+                    }
+                } catch (e: IOException) {
+                    _trackState.update { TrackDetailsState.Error(e.message.toString()) }
+                }
+            }
+        }
+    }
+
+
 }
 
 sealed class TrackDetailsState(){
     object Initial: TrackDetailsState() // Cостояние экрана при первой загрузке
     object Loading: TrackDetailsState() // Cостояние экрана при начале поиска
-    data class Success(val foundTrack: Track?): TrackDetailsState() // Cостояние экрана при успешном завершении поиска
+
+    object NotFound : TrackDetailsState()
+    data class Success(val foundTrack: Track): TrackDetailsState() // Cостояние экрана при успешном завершении поиска
     data class Error(val error: String): TrackDetailsState() // Cостояние экрана если при запросе к серверу произошла ошибка
 }

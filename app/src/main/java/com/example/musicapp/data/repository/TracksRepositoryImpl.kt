@@ -33,11 +33,8 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient, private val
     override fun getFavoriteTracks(): Flow<List<Track>> {
         return db.getFavoriteTracks()
     }
-
-
-
-    override suspend fun updateFavoriteStatus(id: Long, favorite: Boolean) {
-        db.updateFavoriteStatus(id, favorite)
+    override suspend fun updateFavoriteStatus(id: Long, favorite: Boolean) : Track? {
+        return db.updateFavoriteStatus(id, favorite)
     }
 
 }

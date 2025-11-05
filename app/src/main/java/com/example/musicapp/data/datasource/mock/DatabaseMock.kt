@@ -55,7 +55,7 @@ class DatabaseMock(storage: Storage) {
     }
 
     fun getTrackById(trackId: Long): Track?{
-        return tracks.find { it.id == trackId}
+        return tracks.find{ it.id == trackId}?.copy()
     }
 
     fun insertTrack(track: Track) {
@@ -81,8 +81,10 @@ class DatabaseMock(storage: Storage) {
         playlist?.trackIds?.remove(trackId)
     }
 
-    fun updateFavoriteStatus(id: Long, favorite: Boolean){
-        tracks.find{it.id==id}?.favorite = favorite
+    fun updateFavoriteStatus(id: Long, favorite: Boolean): Track?{
+        val track = tracks.find{it.id==id}
+        track?.favorite = favorite
+        return track?.copy()
     }
 }
 

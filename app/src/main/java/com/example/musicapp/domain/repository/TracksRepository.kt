@@ -10,6 +10,6 @@ interface TracksRepository {
 
     fun getFavoriteTracks(): Flow<List<Track>>
 
-    suspend fun updateFavoriteStatus(id: Long, favorite: Boolean)
+    suspend fun updateFavoriteStatus(id: Long, favorite: Boolean) : Track?
 
 }
