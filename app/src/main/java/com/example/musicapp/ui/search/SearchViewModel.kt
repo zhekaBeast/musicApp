@@ -3,6 +3,7 @@ package com.example.musicapp.ui.search
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.musicapp.domain.models.TracksSearchRequest
 import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,7 @@ class SearchViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _allTracksScreenState.update { SearchState.Loading }
-                val list = tracksRepository.searchTracks(expression)
+                val list = tracksRepository.searchTracks(TracksSearchRequest(expression=expression))
                 _allTracksScreenState.update { SearchState.Success(foundList = list) }
             } catch (e: IOException) {
                 _allTracksScreenState.update { SearchState.Error(e.message.toString()) }

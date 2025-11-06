@@ -29,11 +29,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
 
 @Composable
-fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun SettingsScreen(navController: NavHostController) {
     val context = LocalContext.current
 
     Column(Modifier
@@ -64,7 +65,7 @@ private fun shareApp(context: Context) {
 
 private fun sendEmailToSupport(context: Context) {
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-        setData(Uri.parse("mailto:"))
+        setData("mailto:".toUri())
         putExtra(Intent.EXTRA_EMAIL, arrayOf(context.getString(R.string.support_email)))
         putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
         putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_body))

@@ -50,8 +50,6 @@ fun SearchScreen(navController: NavHostController) {
         resetSearchState = viewModel::resetState
     )
 }
-
-
 @Composable
 internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState: SearchState, resetSearchState: () -> Unit ) {
     var text by remember { mutableStateOf("") }

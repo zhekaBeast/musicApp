@@ -6,8 +6,8 @@ import com.example.musicapp.domain.models.Track
 import com.example.musicapp.domain.repository.TracksRepository
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient): TracksRepository {
-    override suspend fun searchTracks(expression: String): List<Track> {
-        val response = networkClient.doRequest(expression)
+    override suspend fun searchTracks(request: TracksSearchResponse): List<Track> {
+        val response = networkClient.doRequest(request)
         if(response.resultCode==200){
             return (response as TracksSearchResponse).results.map{
                 val seconds = it.trackTimeMillis/1000
