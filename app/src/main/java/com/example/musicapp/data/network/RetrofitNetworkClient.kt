@@ -1,7 +1,7 @@
 package com.example.musicapp.data.network
 
 import com.example.musicapp.creator.Storage
-import com.example.musicapp.data.NetworkClient
+import com.example.musicapp.domain.NetworkClient
 import com.example.musicapp.data.dto.BaseResponse
 import com.example.musicapp.data.dto.TracksSearchResponse
 import com.example.musicapp.domain.models.TracksSearchRequest
