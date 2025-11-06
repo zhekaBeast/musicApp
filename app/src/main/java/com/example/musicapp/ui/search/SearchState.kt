@@ -1,6 +1,6 @@
 package com.example.musicapp.ui.search
 
-import com.example.musicapp.data.network.Track
+import com.example.musicapp.domain.models.Track
 
 sealed class SearchState {
     object Initial: SearchState() // Cостояние экрана при первой загрузке

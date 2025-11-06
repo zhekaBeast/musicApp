@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
-import com.example.musicapp.data.network.Track
+import com.example.musicapp.domain.models.Track
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
@@ -50,8 +50,6 @@ fun SearchScreen(navController: NavHostController) {
         resetSearchState = viewModel::resetState
     )
 }
-
-
 @Composable
 internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState: SearchState, resetSearchState: () -> Unit ) {
     var text by remember { mutableStateOf("") }
@@ -63,11 +61,11 @@ internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState:
             fetchSearchSong(text)
         }
     }
-    Column() {
+    Column {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(all = 16.dp),
             singleLine = true,
             placeholder = {
                 Text(
@@ -122,14 +120,21 @@ internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState:
 
             is SearchState.Success -> {
                 val tracks = state.foundList
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(count = tracks.size) { index ->
-                        TrackListItem(track = tracks[index])
-                        HorizontalDivider(thickness = 0.5.dp)
+                if (tracks.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(stringResource(R.string.no_found))
+                    }
+
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(count = tracks.size) { index ->
+                            TrackListItem(track = tracks[index])
+                            HorizontalDivider(thickness = 0.5.dp)
+                        }
                     }
                 }
             }
@@ -150,9 +155,9 @@ fun TrackListItem(track: Track) {
                 )
             }
         )
-        Column() {
+        Column {
             Text(track.trackName, fontWeight = FontWeight.Bold)
-            Row() {
+            Row {
                 Text(track.artistName)
                 Text(modifier = Modifier.padding(start = 8.dp), text = track.trackTime)
             }

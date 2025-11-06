@@ -67,3 +67,4 @@ class Storage {
         return result
     }
 }
+

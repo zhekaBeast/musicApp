@@ -1,7 +1,7 @@
-package com.example.musicapp.data.network
+package com.example.musicapp.domain.models
 
-data class Track (
+data class Track(
     val trackName: String,
     val artistName: String,
     val trackTime: String
-    )
+)

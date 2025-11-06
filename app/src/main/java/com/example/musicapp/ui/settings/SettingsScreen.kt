@@ -2,7 +2,7 @@ package com.example.musicapp.ui.settings
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,11 +28,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
 
 @Composable
-fun SettingsScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun SettingsScreen(navController: NavHostController) {
     val context = LocalContext.current
 
     Column(Modifier
@@ -63,17 +64,21 @@ private fun shareApp(context: Context) {
 
 private fun sendEmailToSupport(context: Context) {
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-        setData(Uri.parse("mailto:"))
+        setData("mailto:".toUri())
         putExtra(Intent.EXTRA_EMAIL, arrayOf(context.getString(R.string.support_email)))
         putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
         putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_body))
     }
-    context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.choose_email_client)))
+    if (emailIntent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.choose_email_client)))
+    } else {
+        Toast.makeText(context, context.getString(R.string.no_email_client), Toast.LENGTH_SHORT).show()
+    }
 }
 
 private fun openUserAgreement(context: Context) {
     val agreementUrl = context.getString(R.string.user_agreement_url)
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(agreementUrl))
+    val intent = Intent(Intent.ACTION_VIEW, agreementUrl.toUri())
     context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_browser)))
 }
 
