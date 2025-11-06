@@ -23,7 +23,7 @@ class SearchViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _allTracksScreenState.update { SearchState.Loading }
-                val list = tracksRepository.SearchTracks(expression)
+                val list = tracksRepository.searchTracks(expression)
                 _allTracksScreenState.update { SearchState.Success(foundList = list) }
             } catch (e: IOException) {
                 _allTracksScreenState.update { SearchState.Error(e.message.toString()) }

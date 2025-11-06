@@ -3,6 +3,7 @@ package com.example.musicapp.ui.settings
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,7 +69,11 @@ private fun sendEmailToSupport(context: Context) {
         putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
         putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_body))
     }
-    context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.choose_email_client)))
+    if (emailIntent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.choose_email_client)))
+    } else {
+        Toast.makeText(context, context.getString(R.string.no_email_client), Toast.LENGTH_SHORT).show()
+    }
 }
 
 private fun openUserAgreement(context: Context) {

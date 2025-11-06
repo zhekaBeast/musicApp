@@ -21,15 +21,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.musicapp.navigation.AppScreen
+import com.example.musicapp.ui.navigation.AppScreen
 
 @Composable
 fun TransitionPanel(
-    appScreen: AppScreen, navController: NavHostController, onNavigate: () -> Unit = {}
+    appScreen: AppScreen, navController: NavHostController
 ) {
     Button(
         onClick = {
-            onNavigate()
             navController.navigate(appScreen.route){
                 launchSingleTop = true
             }
