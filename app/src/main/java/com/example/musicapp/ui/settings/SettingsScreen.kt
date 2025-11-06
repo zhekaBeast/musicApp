@@ -2,7 +2,6 @@ package com.example.musicapp.ui.settings
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -79,7 +78,7 @@ private fun sendEmailToSupport(context: Context) {
 
 private fun openUserAgreement(context: Context) {
     val agreementUrl = context.getString(R.string.user_agreement_url)
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(agreementUrl))
+    val intent = Intent(Intent.ACTION_VIEW, agreementUrl.toUri())
     context.startActivity(Intent.createChooser(intent, context.getString(R.string.choose_browser)))
 }
 
