@@ -3,10 +3,11 @@ package com.example.musicapp.data.repository
 import com.example.musicapp.data.NetworkClient
 import com.example.musicapp.data.dto.TracksSearchResponse
 import com.example.musicapp.domain.models.Track
+import com.example.musicapp.domain.models.TracksSearchRequest
 import com.example.musicapp.domain.repository.TracksRepository
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient): TracksRepository {
-    override suspend fun searchTracks(request: TracksSearchResponse): List<Track> {
+    override suspend fun searchTracks(request: TracksSearchRequest): List<Track> {
         val response = networkClient.doRequest(request)
         if(response.resultCode==200){
             return (response as TracksSearchResponse).results.map{
