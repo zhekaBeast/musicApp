@@ -1,5 +1,9 @@
 package com.example.musicapp.ui.components.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,28 +30,30 @@ import com.example.musicapp.ui.navigation.AppScreen
 
 
 @Composable
-fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {
+fun TopBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     when(currentDestination?.route){
         AppScreen.Home.route->{
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .background(color = Color.Blue)
-                    .padding(top = 16.dp)
-            ) {
-                Text(
-                    stringResource(R.string.AppName), modifier = Modifier
-                        .padding(start = 24.dp)
-                        .align(Alignment.CenterVertically),
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        color = Color.White
-                    )
+            EnterAnimation {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .background(color = Color.Blue)
+                        .padding(top = 16.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.AppName), modifier = Modifier
+                            .padding(start = 24.dp)
+                            .align(Alignment.CenterVertically),
+                        style = TextStyle(
+                            fontSize = 22.sp,
+                            color = Color.White
+                        )
 
-                )
+                    )
+                }
             }
         }
         else -> {
@@ -57,16 +63,16 @@ fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {
                 AppScreen.Playlists.route -> AppScreen.Playlists
                 else -> AppScreen.Null
             }
+            EnterAnimation {
+
             Row(
-                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(64.dp)
                     .padding(top = 16.dp)
-                    .background(color = Color.Gray)
             ) {
                 IconButton(
                     onClick = {
-                        onNavigate()
                         navController.popBackStack()
                     }) {
                     Icon(
@@ -78,10 +84,28 @@ fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {
                 if(appScreen.showTitle) {
                     Text(
                         stringResource(appScreen.titleId), style = TextStyle(fontSize = 22.sp),
-                        modifier = Modifier.padding(start = 12.dp).padding(vertical = 10.dp)
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .align(Alignment.CenterVertically)
                     )
                 }
             }
+            }
+
         }
+    }
+}
+
+@Composable
+private fun EnterAnimation(content: @Composable () -> Unit) {
+    AnimatedVisibility(
+        visibleState = MutableTransitionState(
+            initialState = false
+        ).apply { targetState = true },
+        modifier = Modifier,
+        enter = fadeIn(initialAlpha = 0.3f),
+        exit = fadeOut(),
+    ) {
+        content()
     }
 }

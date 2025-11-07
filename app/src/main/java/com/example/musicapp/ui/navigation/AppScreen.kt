@@ -9,9 +9,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.musicapp.R
 
-
-fun createTrackDetailsRoute(trackId: Long) = "trackDetails/$trackId"
-fun createPlaylistRoute(playlistId: Long) = "playlist/$playlistId"
+object RouteCreator{
+    fun createTrackDetailsRoute(trackId: Long) = "trackDetails/$trackId"
+    fun createPlaylistRoute(playlistId: Long) = "playlist/$playlistId"
+}
 enum class AppScreen(
     val route: String,
     val icon: ImageVector,

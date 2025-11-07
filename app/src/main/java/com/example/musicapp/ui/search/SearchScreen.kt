@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
 import com.example.musicapp.domain.models.Track
+import com.example.musicapp.ui.navigation.RouteCreator
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
@@ -47,11 +48,12 @@ fun SearchScreen(navController: NavHostController) {
     SearchScreenContent(
         fetchSearchSong = viewModel::fetchData,
         searchState = searchState,
-        resetSearchState = viewModel::resetState
+        resetSearchState = viewModel::resetState,
+        navController = navController
     )
 }
 @Composable
-internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState: SearchState, resetSearchState: () -> Unit ) {
+internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState: SearchState, resetSearchState: () -> Unit, navController: NavHostController ) {
     var text by remember { mutableStateOf("") }
     LaunchedEffect(text) {
         delay(500)
@@ -132,7 +134,7 @@ internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState:
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(count = tracks.size) { index ->
-                            TrackListItem(track = tracks[index])
+                            TrackListItem(track = tracks[index], navController)
                             HorizontalDivider(thickness = 0.5.dp)
                         }
                     }
@@ -144,10 +146,10 @@ internal fun SearchScreenContent(fetchSearchSong: (String) -> Unit, searchState:
 
 
 @Composable
-fun TrackListItem(track: Track) {
+fun TrackListItem(track: Track, navController: NavHostController) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         IconButton(
-            onClick = {},
+            onClick = {navController.navigate(RouteCreator.createTrackDetailsRoute(track.id))},
             content = {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
