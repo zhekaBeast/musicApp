@@ -1,7 +1,7 @@
 package com.example.musicapp.data.datasource.mock
 
 import com.example.musicapp.data.datasource.dto.Playlist
-import com.example.musicapp.data.datasource.dto.Track
+import com.example.musicapp.data.datasource.dto.TrackDto
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +15,7 @@ class DatabaseMock(storage: Storage) {
     private val _historyUpdates = MutableSharedFlow<Unit>()
     private val playlists = mutableListOf<Playlist>()
 
-    private val tracks = storage.getAllTracks().toMutableList<Track>()
+    private val tracks = storage.getAllTracks().toMutableList<TrackDto>()
 
     fun getPlaylist(id: Long): Flow<Playlist?> = flow {
         delay(500)
@@ -54,16 +54,16 @@ class DatabaseMock(storage: Storage) {
         playlists.removeIf { it.id == id }
     }
 
-    fun getTrackById(trackId: Long): Track?{
-        return tracks.find{ it.id == trackId}?.copy()
+    fun getTrackById(trackId: Long): TrackDto?{
+        return tracks.find{it.id == trackId}?.copy()
     }
 
-    fun insertTrack(track: Track) {
+    fun insertTrack(track: TrackDto) {
         tracks.removeIf { it.id == track.id }
         tracks.add(track)
     }
 
-    fun getFavoriteTracks(): Flow<List<Track>> = flow {
+    fun getFavoriteTracks(): Flow<List<TrackDto>> = flow {
         delay(300)
         val favorites = tracks.filter { it.favorite }
         emit(favorites)
@@ -81,7 +81,7 @@ class DatabaseMock(storage: Storage) {
         playlist?.trackIds?.remove(trackId)
     }
 
-    fun updateFavoriteStatus(id: Long, favorite: Boolean): Track?{
+    fun updateFavoriteStatus(id: Long, favorite: Boolean): TrackDto?{
         val track = tracks.find{it.id==id}
         track?.favorite = favorite
         return track?.copy()

@@ -22,7 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.musicapp.R
-import com.example.musicapp.navigation.AppScreen
+import com.example.musicapp.ui.navigation.AppScreen
+
 
 @Composable
 fun TopBar(navController: NavHostController, onNavigate: () -> Unit = {}) {

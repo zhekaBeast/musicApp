@@ -29,4 +29,6 @@
     <string name="playlist_description">Описание</string>
     <string name="add_track_to_playlist">Добавить трек в плейлист</string>
     <string name="add_track_to_favorite">Добавить трек в избранное</string>
+    <string name="no_found">Ничего не найдено</string>
+    <string name="no_email_client">Почтовый клиент не найден</string>
 </resources>

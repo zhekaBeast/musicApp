@@ -27,10 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.musicapp.R
-import com.example.musicapp.data.datasource.dto.Track
+import com.example.musicapp.domain.models.Track
 import com.example.musicapp.ui.components.common.DisplayError
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
@@ -40,15 +39,16 @@ import org.koin.compose.koinInject
 fun TrackDetailsScreen(trackId: Long?) {
     val vm = koinInject<TrackDetailsViewModel>()
     val state by vm.trackState.collectAsState()
-    TrackDetailsScreenContent(state, vm::getTrackById, trackId ?: -1)
+    TrackDetailsScreenContent(state, vm::getTrackById, vm::toggleFavorite,
+        vm::addTrackInPlaylist, trackId?: -1)
 }
 
 @Composable
 private fun TrackDetailsScreenContent(
     trackDetailsState: TrackDetailsState,
     loadTrack: (id:Long) -> Unit,
-    addTrackToFavorite: (id:Long) -> Unit,
-    addTrackToPlaylist: (trackId:Long, playlistId:Long) -> Unit,
+    addTrackToFavorite: () -> Unit,
+    addTrackToPlaylist: (playlistId:Long) -> Unit,
     trackId: Long
 ) {
     LaunchedEffect(text) {
@@ -86,8 +86,8 @@ private fun TrackDetailsScreenContent(
 @Composable
 private fun TrackDetails(
     track: Track,
-                         addTrackToFavorite: (id:Long) -> Unit,
-                         addTrackToPlaylist: (trackId:Long, playlistId:Long) -> Unit
+    addTrackToFavorite: () -> Unit,
+    addTrackToPlaylist: (playlistId:Long) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -100,8 +100,8 @@ private fun TrackDetails(
         Text(track.trackName)
         Text(track.artistName)
         Text(track.trackTime)
-        Button(onClick = { addTrackToFavorite(track.id) }) { Text(stringResource(R.string.add_track_to_playlist)) }
-        Button(onClick = { addTrackToFavorite(track.id) })
+        Button(onClick = { addTrackToFavorite() }) { Text(stringResource(R.string.add_track_to_playlist)) }
+        Button(onClick = { addTrackToFavorite() })
         { Text(stringResource(R.string.add_track_to_favorite)) }
 
     }

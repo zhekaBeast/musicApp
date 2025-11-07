@@ -1,3 +1,3 @@
-package com.example.musicapp.data.datasource.dto
+package com.example.musicapp.domain.models
 
 data class TracksSearchRequest(val expression: String)

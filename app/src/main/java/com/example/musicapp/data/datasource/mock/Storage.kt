@@ -1,6 +1,5 @@
 package com.example.musicapp.data.datasource.mock
 
-import com.example.musicapp.data.datasource.dto.Track
 import com.example.musicapp.data.datasource.dto.TrackDto
 
 class Storage {
@@ -78,12 +77,7 @@ class Storage {
         return result
     }
 
-    fun getAllTracks(): List<Track> {
-        return listTracks.map{
-            val seconds = it.trackTimeMillis/1000
-            val minutes = seconds/60
-            val trackTime = "%02d".format(minutes) + ":" + "%02d".format(seconds%60)
-            Track(trackName =  it.trackName, artistName =  it.artistName, trackTime =  trackTime)
-        }
+    fun getAllTracks(): List<TrackDto> {
+        return listTracks.toList()
     }
 }

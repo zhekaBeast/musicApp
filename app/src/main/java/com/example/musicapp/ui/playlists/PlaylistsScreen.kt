@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
 import com.example.musicapp.data.datasource.dto.Playlist
-import com.example.musicapp.navigation.AppScreen
+import com.example.musicapp.ui.navigation.AppScreen
 import org.koin.compose.koinInject
 
 @Composable

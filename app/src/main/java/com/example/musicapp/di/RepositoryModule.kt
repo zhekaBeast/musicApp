@@ -1,11 +1,11 @@
 package com.example.musicapp.di
 
-import com.example.musicapp.data.datasource.api.NetworkClient
 import com.example.musicapp.data.datasource.mock.DatabaseMock
 import com.example.musicapp.data.datasource.mock.Storage
-import com.example.musicapp.data.datasource.retrofit.RetrofitNetworkClient
+import com.example.musicapp.data.network.RetrofitNetworkClient
 import com.example.musicapp.data.repository.PlaylistsRepositoryImpl
 import com.example.musicapp.data.repository.TracksRepositoryImpl
+import com.example.musicapp.domain.NetworkClient
 import com.example.musicapp.domain.repository.PlaylistsRepository
 import com.example.musicapp.domain.repository.TracksRepository
 import org.koin.dsl.module

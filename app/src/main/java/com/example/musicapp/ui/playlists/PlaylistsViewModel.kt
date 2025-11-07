@@ -3,7 +3,7 @@ package com.example.musicapp.ui.playlists
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapp.data.datasource.dto.Playlist
-import com.example.musicapp.data.datasource.dto.Track
+import com.example.musicapp.domain.models.Track
 import com.example.musicapp.domain.repository.PlaylistsRepository
 import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.Dispatchers
