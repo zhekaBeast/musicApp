@@ -1,4 +1,4 @@
-package com.example.musicapp.navigation
+package com.example.musicapp.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite

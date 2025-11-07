@@ -1,4 +1,4 @@
-package com.example.musicapp.navigation
+package com.example.musicapp.ui.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
@@ -22,7 +22,7 @@ import com.example.musicapp.ui.settings.SettingsScreen
 
 
 @Composable
-fun EnterAnimation(content: @Composable () -> Unit) {
+private fun EnterAnimation(content: @Composable () -> Unit) {
     AnimatedVisibility(
         visibleState = MutableTransitionState(
             initialState = false
@@ -42,7 +42,6 @@ fun EnterAnimation(content: @Composable () -> Unit) {
 fun NavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    onNavigate: ()->Unit = {},
     startDestination: String = AppScreen.Home.route
 ) {
     NavHost(
@@ -54,7 +53,7 @@ fun NavGraph(
             route = AppScreen.Home.route
         ) {
             EnterAnimation {
-                HomeScreen(navController, onNavigate)
+                HomeScreen(navController)
             }
         }
         composable(

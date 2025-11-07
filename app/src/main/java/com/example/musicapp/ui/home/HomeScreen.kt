@@ -5,26 +5,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.musicapp.navigation.AppScreen
+import com.example.musicapp.ui.navigation.AppScreen
 
 @Composable
-fun HomeScreen(navController: NavHostController, onNavigate: () -> Unit = {}) {
+fun HomeScreen(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
     ) {
-    Column() {
+    Column {
             TransitionPanel(
-                AppScreen.Search, navController, onNavigate
+                AppScreen.Search, navController
             )
             TransitionPanel(
-                AppScreen.Playlists, navController, onNavigate
+                AppScreen.Playlists, navController
             )
             TransitionPanel(
-                AppScreen.Favorite, navController, onNavigate
+                AppScreen.Favorite, navController,
             )
             TransitionPanel(
-                AppScreen.Settings, navController, onNavigate
+                AppScreen.Settings, navController
             )
         }
     }
