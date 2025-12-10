@@ -3,37 +3,38 @@ package com.example.musicapp.ui.playlists
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapp.data.datasource.dto.Playlist
-import com.example.musicapp.domain.models.Track
 import com.example.musicapp.domain.repository.PlaylistsRepository
-import com.example.musicapp.domain.repository.TracksRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(
-    private val playlistsRepository: PlaylistsRepository,
-    private val tracksRepository :TracksRepository
+    private val playlistsRepository: PlaylistsRepository
 ) : ViewModel() {
-    val playlists: Flow<List<Playlist>> = playlistsRepository.getAllPlaylists()
-    val favoriteList: Flow<List<Track>> = tracksRepository.getFavoriteTracks()
+    private val _state = MutableStateFlow<PlaylistsState>(PlaylistsState.Loading)
+    val state = _state.asStateFlow()
 
-
-
-    fun insertSongToPlaylist(track: Track, playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-            playlistsRepository.insertSongToPlaylist(track.id, playlist.id)
-        }
+    init {
+        loadPlaylists()
     }
 
-    fun deleteSongFromPlaylist(track: Track, playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-            playlistsRepository.deleteSongFromPlaylist(track.id, playlist.id)
-        }
-    }
-
-    fun deletePlaylist(playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-        playlistsRepository.deletePlaylistById(playlist.id)
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            _state.update { PlaylistsState.Loading }
+            try {
+                val playlists = playlistsRepository.getAllPlaylists()
+                PlaylistsState.Success(playlists)
+            } catch (e: Exception) {
+                _state.update { PlaylistsState.Error(e.message ?: "Ошибка") }
             }
+        }
     }
+}
+
+sealed class PlaylistsState {
+    object Loading : PlaylistsState()
+    data class Success(val playlists: Flow<List<Playlist>>) : PlaylistsState()
+    data class Error(val message: String) : PlaylistsState()
 }

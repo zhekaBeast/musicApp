@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,8 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.musicapp.R
 import com.example.musicapp.data.datasource.dto.Playlist
@@ -36,12 +39,40 @@ import com.example.musicapp.ui.navigation.AppScreen
 import org.koin.compose.koinInject
 
 @Composable
-fun PlaylistsScreen(navController: NavHostController, modifier: Modifier = Modifier) {
-    Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()){
-        Text(stringResource(R.string.playlists))
+fun PlaylistsScreen(navController: NavHostController) {
+    val vm: PlaylistsViewModel = koinInject()
+    val state by vm.state.collectAsState()
+    PlaylistsScreenContent(state, navController)
+}
+
+@Composable
+fun PlaylistsScreenContent(
+    playlistsState: PlaylistsState,
+    navController: NavController
+) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp), contentAlignment = Alignment.Center) {
+
+        when (val state = playlistsState) {
+            is PlaylistsState.Error -> {
+                Text("Ошибка: ${state.message}", color = Color.Red)
+            }
+
+            PlaylistsState.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            is PlaylistsState.Success -> {
+                val playlists by state.playlists.collectAsState(emptyList())
+                PlaylistList(playlists, navController)
+            }
+        }
     }
-    val viewModel: PlaylistsViewModel = koinInject()
-    val playlists by viewModel.playlists.collectAsState(emptyList())
+}
+
+@Composable
+fun PlaylistList(playlists: List<Playlist>, navController: NavController){
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -53,10 +84,10 @@ fun PlaylistsScreen(navController: NavHostController, modifier: Modifier = Modif
                     .fillMaxWidth()
                     .padding(top = 4.dp, start = 8.dp, end = 8.dp),
             ) {
-                LazyColumn(modifier = modifier.fillMaxSize()) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(playlists.size) { index ->
-                        PlaylistContent(playlist = playlists[index]) {
-                            navController.popBackStack()//
+                        PlaylistListItem(playlist = playlists[index]) {
+                            TODO()
                         }
                         HorizontalDivider(thickness = 0.5.dp)
                     }
@@ -67,7 +98,7 @@ fun PlaylistsScreen(navController: NavHostController, modifier: Modifier = Modif
             modifier = Modifier
                 .padding(32.dp)
                 .align(Alignment.BottomEnd),
-            onClick = {navController.navigate(AppScreen.NewPlaylist.route) },
+            onClick = { navController.navigate(AppScreen.NewPlaylist.route) },
             containerColor = Color.Gray,
             contentColor = Color.White,
             shape = CircleShape
@@ -78,31 +109,39 @@ fun PlaylistsScreen(navController: NavHostController, modifier: Modifier = Modif
             )
         }
     }
+
 }
-
-
 @Composable
-fun PlaylistContent(playlist: Playlist, onClick: () -> Unit) {
+fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
     Row(
-        modifier = Modifier.Companion
+        modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = { onClick.invoke() }),
-        verticalAlignment = Alignment.Companion.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
             modifier = Modifier.size(48.dp),
             painter = painterResource(id = R.drawable.library_light),
             contentDescription = playlist.name,
-            colorFilter = ColorFilter.Companion.tint(Color.Companion.Gray)
+            colorFilter = ColorFilter.tint(Color.Gray)
         )
         Column(
-            modifier = Modifier.Companion.weight(1f),
-            horizontalAlignment = Alignment.Companion.Start
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp),
+            horizontalAlignment = Alignment.Start
+
         ) {
             Text(playlist.name, fontSize = 16.sp)
             val text = "${playlist.trackIds.size} tracks"
             Text(text, fontSize = 11.sp, color = Color.Gray)
         }
     }
+}
+
+@Preview
+@Composable
+fun test() {
+    PlaylistListItem(Playlist(1, "asd", "asd"), {})
 }

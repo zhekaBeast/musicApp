@@ -1,11 +1,14 @@
 package com.example.musicapp.ui.newPlaylist
 
 import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -19,8 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.musicapp.R
@@ -47,51 +54,83 @@ fun NewPlaylistContent(
     newPlaylistState: NewPlaylistState,
     context: Context
 ) {
-    var playlistName by remember { mutableStateOf("") }
-    var playlistDescription by remember { mutableStateOf("") }
+
     when(val state = newPlaylistState) {
         is NewPlaylistState.Error -> DisplayError.displayToastError(context, state.error)
-        NewPlaylistState.Initial,
-        NewPlaylistState.Loading ->  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            stringResource(R.string.playlist_name),
-                            modifier = Modifier.alpha(0.7f)
-                        )
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    value = playlistName,
-                    onValueChange = { playlistName = it }
-                )
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            stringResource(R.string.playlist_name),
-                            modifier = Modifier.alpha(0.7f)
-                        )
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    value = playlistDescription,
-                    onValueChange = { playlistDescription = it }
-                )
-                Button(
-                    onClick = { createPlaylist(playlistName, playlistDescription) }
-                ) {
-                    Text("Создать")
+        NewPlaylistState.Initial->{
+            form(createPlaylist)
+        }
+        NewPlaylistState.Loading,
+        NewPlaylistState.Success -> {
+            navController.popBackStack()
+            Toast.makeText(context, stringResource(R.string.playlist_created), Toast.LENGTH_LONG).show()
+        }
+
+    }
+}
+
+@Composable
+fun form(onClick: (String, String) -> Unit){
+    var playlistName by remember { mutableStateOf("") }
+    var playlistDescription by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Box(contentAlignment = Alignment.Center,
+            modifier = Modifier.weight(5f).fillMaxWidth()){
+        Image(
+            modifier = Modifier.size(48.dp),
+            painter = painterResource(id = R.drawable.library_light),
+            contentDescription = stringResource(R.string.playlist_name),
+            colorFilter = ColorFilter.tint(Color.Gray)
+        )
+        }
+        Box(modifier = Modifier.weight(1f)) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                        singleLine = true,
+                placeholder = {
+                    Text(
+                        stringResource(R.string.playlist_name),
+                        modifier = Modifier.alpha(0.7f)
+                    )
+                },
+                shape = RoundedCornerShape(8.dp),
+                value = playlistName,
+                onValueChange = { playlistName = it }
+            )
+        }
+            OutlinedTextField(
+                modifier = Modifier.weight(3f)
+                    .fillMaxWidth().padding(bottom = 16.dp),
+                //singleLine = true,
+                placeholder = {
+                    Text(
+                        stringResource(R.string.playlist_description),
+                        modifier = Modifier.alpha(0.7f)
+                    )
+                },
+                shape = RoundedCornerShape(8.dp),
+                value = playlistDescription,
+                onValueChange = { playlistDescription = it }
+            )
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(),
+            onClick = {
+                if (playlistName.isNotEmpty()) {
+                    onClick (playlistName, playlistDescription)
                 }
             }
-        }
-        NewPlaylistState.Success -> navController.popBackStack()
-    }
 
+        ) {
+            Text(stringResource(R.string.create))
+        }
+    }
+}
+
+@Preview
+@Composable
+fun test(){
+    form({a, b->})
 }

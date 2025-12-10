@@ -31,4 +31,8 @@
     <string name="add_track_to_favorite">Добавить трек в избранное</string>
     <string name="no_found">Ничего не найдено</string>
     <string name="no_email_client">Почтовый клиент не найден</string>
+    <string name="create">Создать</string>
+    <string name="playlist_created">Плейлист создан</string>
+    <string name="duration">Длительность</string>
+    <string name="loading">Загрузка</string>
 </resources>

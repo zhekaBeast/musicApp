@@ -5,6 +5,7 @@ import com.example.musicapp.data.datasource.dto.TrackDto
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 
 
@@ -12,26 +13,34 @@ class DatabaseMock(storage: Storage) {
 
 
     private val historyList = mutableListOf<String>()
+    private val _historyFlow = MutableStateFlow(emptyList<String>())
     private val _historyUpdates = MutableSharedFlow<Unit>()
     private val playlists = mutableListOf<Playlist>()
 
     private val tracks = storage.getAllTracks().toMutableList<TrackDto>()
+
+
 
     fun getPlaylist(id: Long): Flow<Playlist?> = flow {
         delay(500)
         emit(playlists.find { it.id == id })
     }
 
-    fun getHistory(): List<String> {
-        return historyList.toList()
-    }
+    fun getHistoryRequests(): Flow<List<String>> = _historyFlow
+
 
     suspend fun addToHistory(word: String) {
+        historyList.removeAll { it.equals(word, ignoreCase = true) }
+
         historyList.add(word)
-        notifyHistoryChanged()
+
+        if (historyList.size > 5) {
+            historyList.removeAt(0)
+        }
+        _historyFlow.emit(historyList.toList())
     }
 
-    private suspend fun notifyHistoryChanged() {
+    suspend private fun notifyHistoryChanged() {
         _historyUpdates.emit(Unit)
     }
 

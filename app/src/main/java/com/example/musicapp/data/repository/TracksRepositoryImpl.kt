@@ -36,18 +36,5 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient, private val
     override suspend fun updateFavoriteStatus(id: Long, favorite: Boolean) : Track? {
         return db.updateFavoriteStatus(id, favorite)?.toDomain()
     }
-
-    private fun TrackDto.toDomain(): Track {
-        val seconds = this.trackTimeMillis/1000
-        val minutes = seconds/60
-        val trackTime = "%02d".format(minutes) + ":" + "%02d".format(seconds%60)
-        return Track(
-            id = this.id,
-            trackName = this.trackName,
-            artistName = this.artistName,
-            trackTime = trackTime,
-            favorite=this.favorite
-        )
-    }
 }
 

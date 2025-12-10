@@ -61,6 +61,8 @@ fun TopBar(navController: NavHostController) {
                 AppScreen.Search.route -> AppScreen.Search
                 AppScreen.Settings.route -> AppScreen.Settings
                 AppScreen.Playlists.route -> AppScreen.Playlists
+                AppScreen.Favorite.route -> AppScreen.Favorite
+                AppScreen.NewPlaylist.route -> AppScreen.NewPlaylist
                 else -> AppScreen.Null
             }
             EnterAnimation {

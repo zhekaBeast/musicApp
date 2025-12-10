@@ -1,15 +1,20 @@
 package com.example.musicapp.ui.trackDetails
 
 import android.R.attr.text
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -26,8 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.musicapp.R
 import com.example.musicapp.domain.models.Track
 import com.example.musicapp.ui.components.common.DisplayError
@@ -39,7 +49,7 @@ import org.koin.compose.koinInject
 fun TrackDetailsScreen(trackId: Long?) {
     val vm = koinInject<TrackDetailsViewModel>()
     val state by vm.trackState.collectAsState()
-    TrackDetailsScreenContent(state, vm::getTrackById, vm::toggleFavorite,
+    TrackDetailsScreenContent(state, vm::loadTrack, vm::toggleFavorite,
         vm::addTrackInPlaylist, trackId?: -1)
 }
 
@@ -69,7 +79,7 @@ private fun TrackDetailsScreenContent(
             }
 
             is TrackDetailsState.Success -> {
-                TrackDetails(state.foundTrack,
+                TrackDetails(state.track,
                     addTrackToFavorite,
                     addTrackToPlaylist)
             }
@@ -89,21 +99,88 @@ private fun TrackDetails(
     addTrackToFavorite: () -> Unit,
     addTrackToPlaylist: (playlistId:Long) -> Unit
 ) {
+    val iconColor = if (track.favorite) Color.Red else Color.Gray
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 32.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(top = 32.dp, start = 16.dp, end = 16.dp),
     ) {
-        Text(track.trackName)
-        Text(track.artistName)
-        Text(track.trackTime)
-        Button(onClick = { addTrackToFavorite() }) { Text(stringResource(R.string.add_track_to_playlist)) }
-        Button(onClick = { addTrackToFavorite() })
-        { Text(stringResource(R.string.add_track_to_favorite)) }
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .weight(3f)
+                .fillMaxWidth()
+        ) {
+            Image(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(id = R.drawable.library_light),
+                contentDescription = stringResource(R.string.playlist_name),
+                colorFilter = ColorFilter.tint(Color.Gray)
+            )
+        }
+        Column(modifier = Modifier
+            .weight(5f)
+            .fillMaxWidth()) {
+            Text(track.trackName, fontSize = 22.sp)
+            Text(track.artistName, fontSize = 14.sp)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 48.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = {
+                        showBottomSheet = true
+                    }, shape = CircleShape,
+                    modifier = Modifier.size(80.dp),
+                    colors = ButtonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.Black,
+                        disabledContentColor = Color.Black
+                    )
+                ) {
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        painter = painterResource(id = R.drawable.library_light),
+                        contentDescription = stringResource(R.string.playlist_name),
+                        colorFilter = ColorFilter.tint(Color.Gray)
+                    )
+                }
+                Button(
+                    onClick = { addTrackToFavorite() }, shape = CircleShape,
+                    modifier = Modifier.size(80.dp),
+                    colors = ButtonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.Black,
+                        disabledContentColor = Color.Black
+                    )
+                )
 
+                {
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        painter = painterResource(id = R.drawable.favorite_light),
+                        contentDescription = stringResource(R.string.playlist_name),
+                        colorFilter = ColorFilter.tint(iconColor)
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 48.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(stringResource(R.string.duration), color = Color.Gray)
+                Text(track.trackTime)
+            }
+
+        }
     }
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -126,7 +203,6 @@ private fun TrackDetails(
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Button(
                     onClick = { /* действие */ },
                     modifier = Modifier.fillMaxWidth()
@@ -147,8 +223,8 @@ private fun TrackDetails(
     }
 }
 
-//@Preview
-//@Composable
-//fun TrackDetailsP(track: Track?) {
-//    TrackDetails(Track(0,"Upal", "Auktion", "12:23"))
-//}
+@Preview
+@Composable
+fun TrackDetailsP() {
+    TrackDetails(Track(0, "Upal", "Auktion", "12:23", false), {}, {})
+}
