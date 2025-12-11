@@ -22,10 +22,9 @@ class PlaylistsViewModel(
 
     fun loadPlaylists() {
         viewModelScope.launch {
-            _state.update { PlaylistsState.Loading }
             try {
                 val playlists = playlistsRepository.getAllPlaylists()
-                PlaylistsState.Success(playlists)
+                _state.update { PlaylistsState.Success(playlists) }
             } catch (e: Exception) {
                 _state.update { PlaylistsState.Error(e.message ?: "Ошибка") }
             }

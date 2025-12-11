@@ -112,7 +112,7 @@ fun NavGraph(
         ) { navBackStackEntry  ->
             val trackId = navBackStackEntry.arguments?.getString("trackId")
             EnterAnimation {
-                TrackDetailsScreen(trackId = trackId?.toLongOrNull())
+                TrackDetailsScreen(trackId = trackId?.toLongOrNull()?:-1)
             }
         }
     }

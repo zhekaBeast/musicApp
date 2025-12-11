@@ -75,8 +75,6 @@ internal fun SearchScreenContent(
 ) {
     var isFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    val onClickOnTrack = {}
     var text by remember { mutableStateOf("") }
     LaunchedEffect(text) {
         delay(500)

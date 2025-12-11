@@ -112,7 +112,7 @@ fun PlaylistList(playlists: List<Playlist>, navController: NavController){
 
 }
 @Composable
-fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
+private fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

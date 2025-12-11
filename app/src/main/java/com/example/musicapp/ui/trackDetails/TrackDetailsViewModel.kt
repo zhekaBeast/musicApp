@@ -17,79 +17,65 @@ class TrackDetailsViewModel(
     private val tracksRepository: TracksRepository,
     private val playlistsRepository: PlaylistsRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow<TrackDetailsState>(TrackDetailsState.Initial)
-    val state = _state.asStateFlow()
-
+    private val _trackState = MutableStateFlow<TrackState>(TrackState.Loading)
+    private val _playlistsState = MutableStateFlow<PlaylistsState>(PlaylistsState.Loading)
+    val trackState = _trackState.asStateFlow()
+    val playlistsState = _playlistsState.asStateFlow()
     fun loadTrack(trackId: Long) {
         viewModelScope.launch {
             try {
-                _state.update { TrackDetailsState.Loading }
                 val track = tracksRepository.getTrackById(trackId)
-
                 if (track == null) {
-                    _state.update { TrackDetailsState.NotFound }
+                    _trackState.update { TrackState.NotFound }
                     return@launch
                 }
-
-                _state.update {
-                    TrackDetailsState.Success(
+                _trackState.update {
+                    TrackState.Success(
                         track = track,
-                        playlists = PlaylistsState.Loading
                     )
                 }
-
-                loadPlaylists()
             } catch (e: IOException) {
-                _state.update { TrackDetailsState.Error(e.message.toString()) }
+                _trackState.update { TrackState.Error(e.message.toString()) }
             }
         }
     }
 
-    private fun loadPlaylists() {
+    fun loadPlaylists() {
         viewModelScope.launch {
-            val currentState = _state.value
-            if (currentState is TrackDetailsState.Success) {
-                try {
-                    val playlists = playlistsRepository.getAllPlaylists()
-
-                    _state.update {
-                        if (it is TrackDetailsState.Success) {
-                            it.copy(playlists = PlaylistsState.Loaded(playlists))
-                        } else it
-                    }
-                } catch (e: Exception) {
-                    _state.update { TrackDetailsState.Error(e.message.toString()) }
-                }
+            try {
+                val playlists = playlistsRepository.getAllPlaylists()
+                _playlistsState.update { PlaylistsState.Loaded(playlists) }
+            } catch (e: Exception) {
+                _playlistsState.update { PlaylistsState.Error(e.message.toString()) }
             }
         }
     }
 
     fun toggleFavorite(){
-        val currentState = _state.value
-        if (currentState is TrackDetailsState.Success) {
+        val currentState = _trackState.value
+        if (currentState is TrackState.Success) {
             viewModelScope.launch {
                 try {
-                    val currentPlaylists = currentState.playlists
-                    _state.update { TrackDetailsState.Loading }
+                    _trackState.update { TrackState.Loading }
                     val updatedTrack = tracksRepository.updateFavoriteStatus(
                         currentState.track!!.id,
                         !currentState.track.favorite
                     )
                     if(updatedTrack==null) {
-                        _state.update { TrackDetailsState.NotFound }
+                        _trackState.update { TrackState.NotFound }
                     } else{
-                        _state.update { TrackDetailsState.Success(updatedTrack, currentPlaylists) }
+                        _trackState.update { TrackState.Success(updatedTrack) }
                     }
                 } catch (e: IOException) {
-                    _state.update { TrackDetailsState.Error(e.message.toString()) }
+                    _trackState.update { TrackState.Error(e.message.toString()) }
                 }
             }
         }
     }
 
     fun addTrackToPlaylist(playlistId: Long) {
-        val currentState = _state.value
-        if (currentState is TrackDetailsState.Success) {
+        val currentState = _trackState.value
+        if (currentState is TrackState.Success) {
             viewModelScope.launch {
                 try {
                     playlistsRepository.insertSongToPlaylist(
@@ -97,17 +83,16 @@ class TrackDetailsViewModel(
                         trackId = currentState.track.id
                     )
                     loadPlaylists()
-
                 } catch (e: Exception) {
-                    _state.update { TrackDetailsState.Error(e.message.toString()) }
+                    _trackState.update { TrackState.Error(e.message.toString()) }
                 }
             }
         }
     }
 
     fun removeTrackFromPlaylist(playlistId: Long) {
-        val currentState = _state.value
-        if (currentState is TrackDetailsState.Success) {
+        val currentState = _trackState.value
+        if (currentState is TrackState.Success) {
             viewModelScope.launch {
                 try {
                     playlistsRepository.deleteSongFromPlaylist(
@@ -116,21 +101,20 @@ class TrackDetailsViewModel(
                     )
                     loadPlaylists()
                 } catch (e: Exception) {
-                    _state.update { TrackDetailsState.Error(e.message.toString()) }
+                    _trackState.update { TrackState.Error(e.message.toString()) }
                 }
             }
         }
     }
 }
 
-sealed class TrackDetailsState(){
-    object Initial: TrackDetailsState()
-    object Loading: TrackDetailsState()
+sealed class TrackState() {
+    object Loading : TrackState()
+    object NotFound : TrackState()
+    data class Success(val track: Track) :
+        TrackState()
 
-    object NotFound : TrackDetailsState()
-    data class Success(val track: Track, val playlists: PlaylistsState) :
-        TrackDetailsState()
-    data class Error(val error: String): TrackDetailsState()
+    data class Error(val error: String) : TrackState()
 }
 
 sealed class PlaylistsState {
