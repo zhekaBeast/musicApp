@@ -66,30 +66,32 @@ private  fun SearchScreenContent(
     resetSearchState: () -> Unit, navController: NavController,
     searchHistory: List<String>
 ) {
-    SearchTextField(
-        fetchSearchSong,
-        resetSearchState,
-        searchHistory
-    )
-    when (val state = searchState) {
-        is SearchState.Error -> {
-            val error = state.error
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Ошибка: $error", color = Color.Red)
+    Column() {
+        SearchTextField(
+            fetchSearchSong,
+            resetSearchState,
+            searchHistory
+        )
+        when (val state = searchState) {
+            is SearchState.Error -> {
+                val error = state.error
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Ошибка: $error", color = Color.Red)
+                }
             }
-        }
 
-        SearchState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+            SearchState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
             }
-        }
 
-        is SearchState.Initial -> {
-        }
+            is SearchState.Initial -> {
+            }
 
-        is SearchState.Success -> {
-            TrackList(state.foundList, navController)
+            is SearchState.Success -> {
+                TrackList(state.foundList, navController)
+            }
         }
     }
 }

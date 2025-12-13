@@ -76,11 +76,15 @@ private fun PlaylistScreenContent(
 
             is PlaylistWithTracksState.Loaded -> {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    Box(modifier = Modifier.weight(5f)) {
+                    Box(modifier = Modifier.weight(4f)) {
                         PlaylistDetails(state.playlistWithTracks)
                     }
-                    Box(modifier = Modifier.weight(3f)) {
-                        TrackList(state.playlistWithTracks.tracks, navController)
+                    Box(modifier = Modifier.weight(3f), Alignment.Center) {
+                        if(state.playlistWithTracks.tracks.isEmpty()){
+                            Text(stringResource(R.string.empty_playlist))
+                        }else {
+                            TrackList(state.playlistWithTracks.tracks, navController)
+                        }
                     }
                 }
             }
@@ -99,7 +103,9 @@ private fun PlaylistDetails(
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
         ) {
             Image(
                 modifier = Modifier.size(48.dp),
@@ -115,12 +121,12 @@ private fun PlaylistDetails(
             Text(playlistWithTracks.playlist.description, fontSize = 14.sp)
             Row {
                 Text(
-                    "${playlistWithTracks.totalDuration}" + stringResource(R.string.minutes),
+                    "${playlistWithTracks.totalDuration} " + stringResource(R.string.minutes),
                     fontSize = 14.sp
                 )
                 Spacer(Modifier.width(16.dp))
                 Text(
-                    "${playlistWithTracks.tracks.size}" + stringResource(R.string.tracks),
+                    "${playlistWithTracks.tracks.size} " + stringResource(R.string.tracks),
                     fontSize = 14.sp
                 )
             }

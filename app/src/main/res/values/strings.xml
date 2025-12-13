@@ -38,4 +38,6 @@
     <string name="add_to_playlist">Добавить в плейлист\n</string>
     <string name="minutes">минут</string>
     <string name="tracks">треков</string>
+    <string name="empty_favorites">Ваша медиатека пуста</string>
+    <string name="empty_playlist">Плейлист пуст!</string>
 </resources>

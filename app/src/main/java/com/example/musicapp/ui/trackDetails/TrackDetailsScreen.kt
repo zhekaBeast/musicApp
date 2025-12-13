@@ -248,11 +248,15 @@ private fun PlaylistsOption(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
     ) {
-        Text(
-            stringResource(R.string.add_to_playlist), style = MaterialTheme.typography.headlineSmall
-        )
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center)
+        {
+            Text(
+                stringResource(R.string.add_to_playlist),
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
