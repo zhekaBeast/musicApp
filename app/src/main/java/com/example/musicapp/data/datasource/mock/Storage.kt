@@ -8,19 +8,22 @@ class Storage {
             id = 0,
             trackName = "Владивосток 2000",
             artistName = "Мумий Троль",
-            trackTimeMillis = 158000
+            trackTimeMillis = 158000,
+            favorite = true
         ),
         TrackDto(
             id = 1,
             trackName = "Группа крови",
             artistName = "Кино",
-            trackTimeMillis = 283000
+            trackTimeMillis = 283000,
+            favorite = true
         ),
         TrackDto(
             id = 2,
             trackName = "Не смотри назад",
             artistName = "Ария",
-            trackTimeMillis = 312000
+            trackTimeMillis = 312000,
+            favorite = true
         ),
         TrackDto(
             id = 3,
