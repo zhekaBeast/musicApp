@@ -1,13 +1,9 @@
 package com.example.musicapp.ui.search
 
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -43,19 +38,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.musicapp.R
-import com.example.musicapp.domain.models.Track
-import com.example.musicapp.ui.navigation.RouteCreator
+import com.example.musicapp.ui.components.common.TrackList
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchScreen(navController: NavController) {
     val viewModel: SearchViewModel = koinInject()
     val searchState by viewModel.allTracksScreenState.collectAsState()
     val searchHistory by viewModel.searchHistory.collectAsState()
@@ -67,10 +59,45 @@ fun SearchScreen(navController: NavHostController) {
         searchHistory = searchHistory
     )
 }
+
 @Composable
-internal fun SearchScreenContent(
+private  fun SearchScreenContent(
     fetchSearchSong: (String) -> Unit, searchState: SearchState,
-    resetSearchState: () -> Unit, navController: NavHostController,
+    resetSearchState: () -> Unit, navController: NavController,
+    searchHistory: List<String>
+) {
+    SearchTextField(
+        fetchSearchSong,
+        resetSearchState,
+        searchHistory
+    )
+    when (val state = searchState) {
+        is SearchState.Error -> {
+            val error = state.error
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Ошибка: $error", color = Color.Red)
+            }
+        }
+
+        SearchState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is SearchState.Initial -> {
+        }
+
+        is SearchState.Success -> {
+            TrackList(state.foundList, navController)
+        }
+    }
+}
+
+@Composable
+private  fun SearchTextField(
+    fetchSearchSong: (String) -> Unit,
+    resetSearchState: () -> Unit,
     searchHistory: List<String>
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -78,9 +105,9 @@ internal fun SearchScreenContent(
     var text by remember { mutableStateOf("") }
     LaunchedEffect(text) {
         delay(500)
-        if (text.isBlank()){
+        if (text.isBlank()) {
             resetSearchState()
-        }else {
+        } else {
             fetchSearchSong(text)
         }
     }
@@ -89,7 +116,7 @@ internal fun SearchScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
-                .onFocusChanged{focusState ->
+                .onFocusChanged { focusState ->
                     isFocused = focusState.isFocused
                 },
             singleLine = true,
@@ -99,7 +126,6 @@ internal fun SearchScreenContent(
                     modifier = Modifier.alpha(0.7f)
                 )
             },
-            //label = stringResource(R.string.search),
             shape = RoundedCornerShape(8.dp),
             value = text,
             onValueChange = {
@@ -136,85 +162,11 @@ internal fun SearchScreenContent(
                 }
             )
         }
-
-        when (val state = searchState) {
-            is SearchState.Error -> {
-                val error = state.error
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Ошибка: $error", color = Color.Red)
-                }
-            }
-
-            SearchState.Loading -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            is SearchState.Initial -> {
-            }
-
-            is SearchState.Success -> {
-                val tracks = state.foundList
-                if (tracks.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(stringResource(R.string.no_found))
-                    }
-
-                } else {
-                    TrackList(tracks, navController)
-                }
-            }
-        }
-    }
-}
-@Composable
-fun TrackList(tracks: List<Track>, navController: NavHostController){
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(count = tracks.size) { index ->
-            TrackListItem(
-                track = tracks[index],
-            ){
-                navController.navigate(RouteCreator.
-                createTrackDetailsRoute(tracks[index].id))
-            }
-            HorizontalDivider(thickness = 0.5.dp)
-        }
     }
 }
 
 @Composable
-fun TrackListItem(track: Track, onClick: () -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth().clickable(
-        interactionSource = remember { MutableInteractionSource()},
-        indication = LocalIndication.current,
-        onClick = onClick
-    ), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(
-            onClick = onClick,
-            content = {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "",
-                )
-            }
-        )
-        Column {
-            Text(track.trackName, fontWeight = FontWeight.Bold)
-            Row {
-                Text(track.artistName)
-                Text(modifier = Modifier.padding(start = 8.dp), text = track.trackTime)
-            }
-        }
-    }
-}
-
-@Composable
-fun HistoryRequests(
+private  fun HistoryRequests(
     historyList: List<String>,
     onClick: (String) -> Unit
 ) {

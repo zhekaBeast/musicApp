@@ -6,7 +6,7 @@ data class TrackDto(
     val id: Long,
     val trackName: String,
     val artistName: String,
-    val trackTimeMillis: Int,
+    val trackTimeMillis: Long,
     var favorite: Boolean=false
 ){
     fun toDomain(): Track {
@@ -18,7 +18,8 @@ data class TrackDto(
             trackName = this.trackName,
             artistName = this.artistName,
             trackTime = trackTime,
-            favorite=this.favorite
+            favorite = this.favorite,
+            trackTimeMillis = trackTimeMillis,
         )
     }
 }

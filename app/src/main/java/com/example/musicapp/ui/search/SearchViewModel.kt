@@ -31,11 +31,13 @@ class SearchViewModel(
             }
         }
     }
+
     fun fetchData(expression: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _allTracksScreenState.update { SearchState.Loading }
-                val list = tracksRepository.searchTracks(TracksSearchRequest(expression=expression))
+                val list =
+                    tracksRepository.searchTracks(TracksSearchRequest(expression = expression))
                 if (expression.isNotBlank() && list.isNotEmpty()) {
                     searchHistoryRepository.addToHistory(expression)
                 }
@@ -47,7 +49,7 @@ class SearchViewModel(
     }
 
     fun resetState() {
-        Log.d("ResetState","reseted")
+        Log.d("ResetState", "reseted")
         _allTracksScreenState.update { SearchState.Initial(history = _searchHistory.value) }
     }
 }

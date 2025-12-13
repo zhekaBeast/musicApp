@@ -28,31 +28,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.musicapp.R
 import com.example.musicapp.data.datasource.dto.Playlist
 import com.example.musicapp.ui.navigation.AppScreen
+import com.example.musicapp.ui.navigation.RouteCreator
 import org.koin.compose.koinInject
 
 @Composable
-fun PlaylistsScreen(navController: NavHostController) {
+fun PlaylistsScreen(navController: NavController) {
     val vm: PlaylistsViewModel = koinInject()
     val state by vm.state.collectAsState()
     PlaylistsScreenContent(state, navController)
 }
 
 @Composable
-fun PlaylistsScreenContent(
+private fun PlaylistsScreenContent(
     playlistsState: PlaylistsState,
     navController: NavController
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp), contentAlignment = Alignment.Center
+    ) {
 
         when (val state = playlistsState) {
             is PlaylistsState.Error -> {
@@ -68,35 +69,8 @@ fun PlaylistsScreenContent(
                 PlaylistList(playlists, navController)
             }
         }
-    }
-}
-
-@Composable
-fun PlaylistList(playlists: List<Playlist>, navController: NavController){
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 8.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp, start = 8.dp, end = 8.dp),
-            ) {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(playlists.size) { index ->
-                        PlaylistListItem(playlist = playlists[index]) {
-                            TODO()
-                        }
-                        HorizontalDivider(thickness = 0.5.dp)
-                    }
-                }
-            }
-        }
         FloatingActionButton(
             modifier = Modifier
-                .padding(32.dp)
                 .align(Alignment.BottomEnd),
             onClick = { navController.navigate(AppScreen.NewPlaylist.route) },
             containerColor = Color.Gray,
@@ -109,8 +83,22 @@ fun PlaylistList(playlists: List<Playlist>, navController: NavController){
             )
         }
     }
-
 }
+
+@Composable
+private fun PlaylistList(playlists: List<Playlist>, navController: NavController) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(playlists.size) { index ->
+            PlaylistListItem(playlist = playlists[index]) {
+                navController.navigate(
+                    RouteCreator.createPlaylistRoute(playlists[index].id)
+                )
+            }
+            HorizontalDivider(thickness = 0.5.dp)
+        }
+    }
+}
+
 @Composable
 private fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
     Row(
@@ -140,8 +128,3 @@ private fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
     }
 }
 
-@Preview
-@Composable
-fun test() {
-    PlaylistListItem(Playlist(1, "asd", "asd"), {})
-}

@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class NewPlaylistViewModel(val playlistsRepository: PlaylistsRepository): ViewModel() {
+class NewPlaylistViewModel(val playlistsRepository: PlaylistsRepository) : ViewModel() {
     private val _newPlaylistState = MutableStateFlow<NewPlaylistState>(NewPlaylistState.Initial)
     val newPlaylistState = _newPlaylistState.asStateFlow()
     fun createNewPlayList(playlistName: String, playlistDescription: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _newPlaylistState.update{NewPlaylistState.Loading}
+                _newPlaylistState.update { NewPlaylistState.Loading }
                 playlistsRepository.addNewPlaylist(playlistName, playlistDescription)
                 _newPlaylistState.update { NewPlaylistState.Success }
             } catch (e: IOException) {
@@ -27,9 +27,9 @@ class NewPlaylistViewModel(val playlistsRepository: PlaylistsRepository): ViewMo
     }
 }
 
-sealed class NewPlaylistState(){
-    object Initial: NewPlaylistState()
-    object Loading: NewPlaylistState()
-    object Success: NewPlaylistState()
-    data class Error(val error: String): NewPlaylistState()
+sealed class NewPlaylistState() {
+    object Initial : NewPlaylistState()
+    object Loading : NewPlaylistState()
+    object Success : NewPlaylistState()
+    data class Error(val error: String) : NewPlaylistState()
 }

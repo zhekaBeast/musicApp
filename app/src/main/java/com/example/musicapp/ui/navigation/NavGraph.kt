@@ -11,6 +11,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,14 +42,16 @@ private fun EnterAnimation(content: @Composable () -> Unit) {
         content()
     }
 }
+
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    navHostController: NavHostController,
     startDestination: String = AppScreen.Home.route
 ) {
+    val navController: NavController = navHostController
     NavHost(
-        navController = navController,
+        navController = navHostController,
         startDestination = startDestination,
         modifier = modifier
     ) {
@@ -76,7 +79,7 @@ fun NavGraph(
         composable(
             route = AppScreen.Favorite.route,
 
-        ) {
+            ) {
             EnterAnimation {
                 FavoriteScreen(navController)
             }
@@ -100,19 +103,22 @@ fun NavGraph(
 
         composable(
             route = AppScreen.Playlist.route
-        ) { navBackStackEntry  ->
+        ) { navBackStackEntry ->
             val playlistId = navBackStackEntry.arguments?.getString("playlistId")
             EnterAnimation {
-                PlaylistScreen(playlistId = playlistId?.toLongOrNull())
+                PlaylistScreen(
+                    playlistId = playlistId?.toLongOrNull() ?: -1,
+                    navController = navController
+                )
             }
         }
 
         composable(
             route = AppScreen.TrackDetails.route
-        ) { navBackStackEntry  ->
+        ) { navBackStackEntry ->
             val trackId = navBackStackEntry.arguments?.getString("trackId")
             EnterAnimation {
-                TrackDetailsScreen(trackId = trackId?.toLongOrNull()?:-1)
+                TrackDetailsScreen(trackId = trackId?.toLongOrNull() ?: -1)
             }
         }
     }

@@ -42,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musicapp.R
@@ -76,9 +75,9 @@ fun TrackDetailsScreen(trackId: Long) {
 private fun TrackDetailsScreenContent(
     trackDetailsState: TrackState,
     playlistsState: PlaylistsState,
-    loadTrack: (id:Long) -> Unit,
+    loadTrack: (id: Long) -> Unit,
     addTrackToFavorite: () -> Unit,
-    addTrackToPlaylist: (playlistId:Long) -> Unit,
+    addTrackToPlaylist: (playlistId: Long) -> Unit,
     loadPlaylists: () -> Unit,
     removeTrackToPlaylist: (playlistId: Long) -> Unit,
     trackId: Long
@@ -149,8 +148,7 @@ private fun TrackDetailsScreenContent(
 
 @Composable
 private fun TrackDetails(
-    track: Track,
-    addTrackToFavorite: () -> Unit, showBottomSheet: () -> Unit
+    track: Track, addTrackToFavorite: () -> Unit, showBottomSheet: () -> Unit
 ) {
     val iconColor = if (track.favorite) Color.Red else Color.Gray
 
@@ -160,8 +158,7 @@ private fun TrackDetails(
             .padding(top = 32.dp, start = 16.dp, end = 16.dp),
     ) {
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
+            contentAlignment = Alignment.Center, modifier = Modifier
                 .weight(3f)
                 .fillMaxWidth()
         ) {
@@ -172,9 +169,11 @@ private fun TrackDetails(
                 colorFilter = ColorFilter.tint(Color.Gray)
             )
         }
-        Column(modifier = Modifier
-            .weight(5f)
-            .fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .weight(5f)
+                .fillMaxWidth()
+        ) {
             Text(track.trackName, fontSize = 22.sp)
             Text(track.artistName, fontSize = 14.sp)
             Row(
@@ -185,7 +184,8 @@ private fun TrackDetails(
             ) {
 
                 Button(
-                    onClick = showBottomSheet, shape = CircleShape,
+                    onClick = showBottomSheet,
+                    shape = CircleShape,
                     modifier = Modifier.size(80.dp),
                     colors = ButtonColors(
                         containerColor = Color.Black,
@@ -202,7 +202,8 @@ private fun TrackDetails(
                     )
                 }
                 Button(
-                    onClick = { addTrackToFavorite() }, shape = CircleShape,
+                    onClick = { addTrackToFavorite() },
+                    shape = CircleShape,
                     modifier = Modifier.size(80.dp),
                     colors = ButtonColors(
                         containerColor = Color.Black,
@@ -237,7 +238,7 @@ private fun TrackDetails(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaylistsOption(
+private fun PlaylistsOption(
     onDismissRequest: () -> Unit,
     currentTrackId: Long,
     addTrackToPlaylist: (playlistId: Long) -> Unit,
@@ -263,7 +264,7 @@ fun PlaylistsOption(
                     currentTrackId = currentTrackId
                 )
                 HorizontalDivider(thickness = 0.5.dp)
-                }
+            }
         }
 
         TextButton(
@@ -336,14 +337,3 @@ private fun PlaylistListItem(
         }
     }
 }
-@Preview
-@Composable
-fun TrackDetailsP() {
-    PlaylistListItem(
-        Playlist(
-            id = 1, name = "asd", description = "asd"
-        ), {}, { }, 1
-    )
-}
-
-

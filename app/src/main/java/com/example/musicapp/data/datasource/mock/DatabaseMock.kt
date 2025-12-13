@@ -45,7 +45,11 @@ class DatabaseMock(storage: Storage) {
     private val tracks = storage.getAllTracks().toMutableList<TrackDto>()
 
 
-
+    fun updatePlaylist(newPlaylist: Playlist){
+        _playlistsFlow.update { it.map{
+            playlist -> if (playlist.id == newPlaylist.id) newPlaylist else playlist
+        } }
+    }
     fun getPlaylist(id: Long): Flow<Playlist?> =
         _playlistsFlow.map { playlists -> playlists.find { it.id == id } }
 

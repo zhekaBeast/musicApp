@@ -11,26 +11,30 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.example.musicapp.ui.search.TrackList
+import androidx.navigation.NavController
+import com.example.musicapp.ui.components.common.TrackList
 import org.koin.compose.koinInject
 
 @Composable
-fun FavoriteScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) {
     val vm = koinInject<FavoriteViewModel>()
     val favoritesState by vm.state.collectAsState()
-    Box(contentAlignment = Alignment.Center, modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Box(
+        contentAlignment = Alignment.Center, modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         when (val state = favoritesState) {
             is FavoritesState.Error -> {
                 Text(state.message)
             }
+
             FavoritesState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
+
             is FavoritesState.Success -> {
                 TrackList(state.tracks, navController)
             }

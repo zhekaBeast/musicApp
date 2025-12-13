@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.musicapp.R
@@ -48,47 +47,55 @@ fun NewPlaylistScreen(navController: NavController) {
 }
 
 @Composable
-fun NewPlaylistContent(
+private fun NewPlaylistContent(
     createPlaylist: (playlistName: String, playlistDescription: String) -> Unit,
     navController: NavController,
     newPlaylistState: NewPlaylistState,
     context: Context
 ) {
 
-    when(val state = newPlaylistState) {
+    when (val state = newPlaylistState) {
         is NewPlaylistState.Error -> DisplayError.displayToastError(context, state.error)
-        NewPlaylistState.Initial->{
-            form(createPlaylist)
+        NewPlaylistState.Initial -> {
+            Form(createPlaylist)
         }
+
         NewPlaylistState.Loading,
         NewPlaylistState.Success -> {
             navController.popBackStack()
-            Toast.makeText(context, stringResource(R.string.playlist_created), Toast.LENGTH_LONG).show()
+            Toast.makeText(context, stringResource(R.string.playlist_created), Toast.LENGTH_LONG)
+                .show()
         }
 
     }
 }
 
 @Composable
-fun form(onClick: (String, String) -> Unit){
+private fun Form(onClick: (String, String) -> Unit) {
     var playlistName by remember { mutableStateOf("") }
     var playlistDescription by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Box(contentAlignment = Alignment.Center,
-            modifier = Modifier.weight(5f).fillMaxWidth()){
-        Image(
-            modifier = Modifier.size(48.dp),
-            painter = painterResource(id = R.drawable.library_light),
-            contentDescription = stringResource(R.string.playlist_name),
-            colorFilter = ColorFilter.tint(Color.Gray)
-        )
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .weight(5f)
+                .fillMaxWidth()
+        ) {
+            Image(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(id = R.drawable.library_light),
+                contentDescription = stringResource(R.string.playlist_name),
+                colorFilter = ColorFilter.tint(Color.Gray)
+            )
         }
         Box(modifier = Modifier.weight(1f)) {
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
-                        singleLine = true,
+                singleLine = true,
                 placeholder = {
                     Text(
                         stringResource(R.string.playlist_name),
@@ -100,26 +107,28 @@ fun form(onClick: (String, String) -> Unit){
                 onValueChange = { playlistName = it }
             )
         }
-            OutlinedTextField(
-                modifier = Modifier.weight(3f)
-                    .fillMaxWidth().padding(bottom = 16.dp),
-                //singleLine = true,
-                placeholder = {
-                    Text(
-                        stringResource(R.string.playlist_description),
-                        modifier = Modifier.alpha(0.7f)
-                    )
-                },
-                shape = RoundedCornerShape(8.dp),
-                value = playlistDescription,
-                onValueChange = { playlistDescription = it }
-            )
+        OutlinedTextField(
+            modifier = Modifier
+                .weight(3f)
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            //singleLine = true,
+            placeholder = {
+                Text(
+                    stringResource(R.string.playlist_description),
+                    modifier = Modifier.alpha(0.7f)
+                )
+            },
+            shape = RoundedCornerShape(8.dp),
+            value = playlistDescription,
+            onValueChange = { playlistDescription = it }
+        )
         Button(
             modifier = Modifier
                 .fillMaxWidth(),
             onClick = {
                 if (playlistName.isNotEmpty()) {
-                    onClick (playlistName, playlistDescription)
+                    onClick(playlistName, playlistDescription)
                 }
             }
 
@@ -127,10 +136,4 @@ fun form(onClick: (String, String) -> Unit){
             Text(stringResource(R.string.create))
         }
     }
-}
-
-@Preview
-@Composable
-fun test(){
-    form({a, b->})
 }

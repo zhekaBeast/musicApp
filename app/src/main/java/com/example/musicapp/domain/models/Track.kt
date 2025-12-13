@@ -5,5 +5,6 @@ data class Track(
     val trackName: String,
     val artistName: String,
     val trackTime: String,
+    val trackTimeMillis: Long,
     val favorite: Boolean
 )

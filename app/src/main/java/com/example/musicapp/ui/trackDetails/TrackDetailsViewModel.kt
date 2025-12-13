@@ -51,19 +51,18 @@ class TrackDetailsViewModel(
         }
     }
 
-    fun toggleFavorite(){
+    fun toggleFavorite() {
         val currentState = _trackState.value
         if (currentState is TrackState.Success) {
             viewModelScope.launch {
                 try {
                     _trackState.update { TrackState.Loading }
                     val updatedTrack = tracksRepository.updateFavoriteStatus(
-                        currentState.track!!.id,
-                        !currentState.track.favorite
+                        currentState.track!!.id, !currentState.track.favorite
                     )
-                    if(updatedTrack==null) {
+                    if (updatedTrack == null) {
                         _trackState.update { TrackState.NotFound }
-                    } else{
+                    } else {
                         _trackState.update { TrackState.Success(updatedTrack) }
                     }
                 } catch (e: IOException) {
@@ -79,8 +78,7 @@ class TrackDetailsViewModel(
             viewModelScope.launch {
                 try {
                     playlistsRepository.insertSongToPlaylist(
-                        playlistId = playlistId,
-                        trackId = currentState.track.id
+                        playlistId = playlistId, trackId = currentState.track.id
                     )
                     loadPlaylists()
                 } catch (e: Exception) {
@@ -96,8 +94,7 @@ class TrackDetailsViewModel(
             viewModelScope.launch {
                 try {
                     playlistsRepository.deleteSongFromPlaylist(
-                        playlistId = playlistId,
-                        trackId = currentState.track.id
+                        playlistId = playlistId, trackId = currentState.track.id
                     )
                     loadPlaylists()
                 } catch (e: Exception) {
@@ -111,8 +108,7 @@ class TrackDetailsViewModel(
 sealed class TrackState() {
     object Loading : TrackState()
     object NotFound : TrackState()
-    data class Success(val track: Track) :
-        TrackState()
+    data class Success(val track: Track) : TrackState()
 
     data class Error(val error: String) : TrackState()
 }

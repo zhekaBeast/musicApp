@@ -35,4 +35,8 @@ class PlaylistsRepositoryImpl(
         db.deleteSongFromPlaylist(trackId, playlistId)
     }
 
+    override suspend fun updatePlaylist(newPlaylist: Playlist) {
+        db.updatePlaylist(newPlaylist)
+    }
+
 }
