@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Support
 import androidx.compose.material3.Button
@@ -50,7 +50,7 @@ fun SettingsScreen(navController: NavController) {
             onClick = { sendEmailToSupport(context) })
         Option(
             title = stringResource(id = R.string.user_agreement),
-            icon = Icons.Default.KeyboardArrowRight,
+            icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             onClick = { openUserAgreement(context) })
     }
 

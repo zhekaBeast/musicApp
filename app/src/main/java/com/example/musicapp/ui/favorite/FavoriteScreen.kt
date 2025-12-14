@@ -41,7 +41,11 @@ fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) 
                 if(state.tracks.isEmpty()){
                     Text(stringResource(R.string.empty_favorites))
                 }else {
-                    TrackList(state.tracks, navController)
+                    TrackList(
+                        tracks = state.tracks,
+                        navController = navController,
+                        onItemLongClick = { track -> vm.removeFromFavorites(track) }
+                    )
                 }
             }
         }

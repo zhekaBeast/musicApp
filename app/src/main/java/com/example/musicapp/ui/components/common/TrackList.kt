@@ -18,7 +18,11 @@ import com.example.musicapp.domain.models.Track
 import com.example.musicapp.ui.navigation.RouteCreator
 
 @Composable
-fun TrackList(tracks: List<Track>, navController: NavController) {
+fun TrackList(
+    tracks: List<Track>,
+    navController: NavController,
+    onItemLongClick: (Track) -> Unit = {}
+) {
     if (tracks.isEmpty()) {
         Box(
             modifier = Modifier.Companion.fillMaxSize(),
@@ -36,11 +40,13 @@ fun TrackList(tracks: List<Track>, navController: NavController) {
             items(count = tracks.size) { index ->
                 TrackListItem(
                     track = tracks[index],
-                ) {
-                    navController.navigate(
-                        RouteCreator.createTrackDetailsRoute(tracks[index].id)
-                    )
-                }
+                    onClick = {
+                        navController.navigate(
+                            RouteCreator.createTrackDetailsRoute(tracks[index].id)
+                        )
+                    },
+                    onLongClick = { onItemLongClick(tracks[index]) }
+                )
                 HorizontalDivider(thickness = 0.5.dp)
             }
         }
