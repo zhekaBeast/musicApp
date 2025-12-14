@@ -44,4 +44,7 @@
     <string name="playlist_cover">Обложка плейлиста</string>
     <string name="delete_playlist">Удалить плейлист</string>
     <string name="cover">Обложка</string>
+    <string name="confirm_delete_playlist">Вы уверены, что хотите удалить этот плейлист?</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
 </resources>

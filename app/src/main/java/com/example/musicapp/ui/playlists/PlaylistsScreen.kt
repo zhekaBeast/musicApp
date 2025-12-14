@@ -1,6 +1,8 @@
 package com.example.musicapp.ui.playlists
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapp.R
 import com.example.musicapp.domain.models.Playlist
+import com.example.musicapp.ui.components.common.ConfirmDialog
 import com.example.musicapp.ui.components.common.UriPicture
 import com.example.musicapp.ui.navigation.AppScreen
 import com.example.musicapp.ui.navigation.RouteCreator
@@ -41,18 +46,24 @@ import org.koin.compose.koinInject
 fun PlaylistsScreen(navController: NavController) {
     val vm: PlaylistsViewModel = koinInject()
     val state by vm.state.collectAsState()
-    PlaylistsScreenContent(state, navController)
+    PlaylistsScreenContent(
+        playlistsState = state,
+        navController = navController,
+        onDeletePlaylist = vm::deletePlaylist
+    )
 }
 
 @Composable
 private fun PlaylistsScreenContent(
     playlistsState: PlaylistsState,
-    navController: NavController
+    navController: NavController,
+    onDeletePlaylist: (Long) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp), contentAlignment = Alignment.Center
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
 
         when (val state = playlistsState) {
@@ -66,7 +77,11 @@ private fun PlaylistsScreenContent(
 
             is PlaylistsState.Success -> {
                 val playlists by state.playlists.collectAsState(emptyList())
-                PlaylistList(playlists, navController)
+                PlaylistList(
+                    playlists = playlists,
+                    navController = navController,
+                    onDeletePlaylist = onDeletePlaylist
+                )
             }
         }
         FloatingActionButton(
@@ -86,27 +101,59 @@ private fun PlaylistsScreenContent(
 }
 
 @Composable
-private fun PlaylistList(playlists: List<Playlist>, navController: NavController) {
+private fun PlaylistList(
+    playlists: List<Playlist>,
+    navController: NavController,
+    onDeletePlaylist: (Long) -> Unit
+) {
+    var playlistToDelete by remember { mutableStateOf<Playlist?>(null) }
+
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(playlists.size) { index ->
-            PlaylistListItem(playlist = playlists[index]) {
-                navController.navigate(
-                    RouteCreator.createPlaylistRoute(playlists[index].id)
-                )
-            }
+            val playlist = playlists[index]
+            PlaylistListItem(
+                playlist = playlist,
+                onClick = {
+                    navController.navigate(
+                        RouteCreator.createPlaylistRoute(playlist.id)
+                    )
+                },
+                onLongClick = { playlistToDelete = playlist }
+            )
             HorizontalDivider(thickness = 0.5.dp)
         }
     }
+
+    playlistToDelete?.let { playlist ->
+        ConfirmDialog(
+            title = stringResource(R.string.delete_playlist),
+            text = stringResource(R.string.confirm_delete_playlist),
+            confirmButtonText = stringResource(R.string.delete),
+            dismissButtonText = stringResource(R.string.cancel),
+            onConfirm = {
+                onDeletePlaylist(playlist.id)
+                playlistToDelete = null
+            },
+            onDismiss = { playlistToDelete = null }
+        )
+    }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
+private fun PlaylistListItem(
+    playlist: Playlist,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(
+            .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
-                onClick = { onClick.invoke() }
+                indication = LocalIndication.current,
+                onClick = onClick,
+                onLongClick = onLongClick
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -119,7 +166,6 @@ private fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
                 .weight(1f)
                 .padding(start = 16.dp),
             horizontalAlignment = Alignment.Start
-
         ) {
             Text(playlist.name, fontSize = 16.sp)
             val text = "${playlist.trackIds.size} tracks"

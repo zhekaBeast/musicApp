@@ -19,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapp.R
+import com.example.musicapp.ui.components.common.ConfirmDialog
 import com.example.musicapp.ui.components.common.DisplayError
 import com.example.musicapp.ui.components.common.TrackList
 import com.example.musicapp.ui.components.common.UriPicture
@@ -77,13 +81,13 @@ private fun PlaylistScreenContent(
             }
 
             is PlaylistWithTracksState.Loaded -> {
+                var showDeleteDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.fillMaxSize()) {
                     Box(modifier = Modifier.weight(5f)) {
                         PlaylistDetails(
                             playlistWithTracks = state.playlistWithTracks,
                             onDelete = {
-                                deletePlaylist()
-                                navController.popBackStack()
+                                showDeleteDialog = true
                             }
                         )
                     }
@@ -94,6 +98,21 @@ private fun PlaylistScreenContent(
                             TrackList(state.playlistWithTracks.tracks, navController)
                         }
                     }
+                }
+
+                if (showDeleteDialog) {
+                    ConfirmDialog(
+                        title = stringResource(R.string.delete_playlist),
+                        text = stringResource(R.string.confirm_delete_playlist),
+                        confirmButtonText = stringResource(R.string.delete),
+                        dismissButtonText = stringResource(R.string.cancel),
+                        onConfirm = {
+                            showDeleteDialog = false
+                            deletePlaylist()
+                            navController.popBackStack()
+                        },
+                        onDismiss = { showDeleteDialog = false }
+                    )
                 }
             }
         }

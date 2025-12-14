@@ -30,6 +30,16 @@ class PlaylistsViewModel(
             }
         }
     }
+
+    fun deletePlaylist(id: Long) {
+        viewModelScope.launch {
+            try {
+                playlistsRepository.deletePlaylistById(id)
+            } catch (e: Exception) {
+                _state.update { PlaylistsState.Error(e.message ?: "Ошибка удаления плейлиста") }
+            }
+        }
+    }
 }
 
 sealed class PlaylistsState {
