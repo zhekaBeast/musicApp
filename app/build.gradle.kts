@@ -4,14 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
-//allprojects {
-//    // ✅ Add this block here for ALL modules
-//    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-//        kotlinOptions {
-//            jvmTarget = "1.8"
-//        }
-//    }
-//}
 android {
     namespace = "com.example.musicapp"
     compileSdk = 36
@@ -52,6 +44,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.ksp)
 
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.material3)

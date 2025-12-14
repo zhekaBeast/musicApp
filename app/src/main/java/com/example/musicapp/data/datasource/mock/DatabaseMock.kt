@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
+private const val MAX_ENTRIES = 10
+private const val SEPARATOR = ","
 
 class DatabaseMock(storage: Storage) {
 
@@ -45,6 +47,7 @@ class DatabaseMock(storage: Storage) {
     private val tracks = storage.getAllTracks().toMutableList<TrackDto>()
 
 
+
     fun updatePlaylist(newPlaylist: Playlist){
         _playlistsFlow.update { it.map{
             playlist -> if (playlist.id == newPlaylist.id) newPlaylist else playlist
@@ -61,7 +64,7 @@ class DatabaseMock(storage: Storage) {
 
         historyList.add(word)
 
-        if (historyList.size > 5) {
+        if (historyList.size > 10) {
             historyList.removeAt(0)
         }
         _historyFlow.emit(historyList.toList())

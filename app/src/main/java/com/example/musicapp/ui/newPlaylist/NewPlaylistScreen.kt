@@ -12,6 +12,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -117,13 +118,12 @@ private fun Form(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .weight(5f)
                 .fillMaxWidth()
+                .aspectRatio(1f)
                 .clickable {
                     // Для Android 13+ (API 33+) разрешения не нужны для выбора изображений
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -160,7 +160,7 @@ private fun Form(
                 )
             }
         }
-        Box(modifier = Modifier.weight(1f)) {
+        Box(modifier = Modifier.padding(top=16.dp)) {
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -178,7 +178,7 @@ private fun Form(
         }
         OutlinedTextField(
             modifier = Modifier
-                .weight(3f)
+                .weight(1f)
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
             //singleLine = true,

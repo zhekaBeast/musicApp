@@ -4,6 +4,7 @@ activityComposeVersion = "1.8.0"
 agp = "8.13.0"
 converterGson = "3.0.0"
 datastorePreferences = "1.2.0"
+datastorePreferencesVersion = "1.0.0"
 insertKoinKoinAndroid = "4.1.0"
 koinAndroidVersion = "3.5.0"
 kotlin = "2.0.21"
@@ -37,6 +38,7 @@ androidx-activity-compose-v180 = { module = "androidx.activity:activity-compose"
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-compose-ui-v154 = { module = "androidx.compose.ui:ui", version.ref = "uiVersion" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-datastore-preferences-v100 = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferencesVersion" }
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }

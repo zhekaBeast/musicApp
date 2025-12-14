@@ -1,10 +1,9 @@
 package com.example.musicapp.ui.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.musicapp.data.preferences.SearchHistoryPreferences
 import com.example.musicapp.domain.models.TracksSearchRequest
-import com.example.musicapp.domain.repository.SearchHistoryRepository
 import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +14,7 @@ import java.io.IOException
 
 class SearchViewModel(
     private val tracksRepository: TracksRepository,
-    private val searchHistoryRepository: SearchHistoryRepository
+    private val searchHistoryPreferences: SearchHistoryPreferences
 ) : ViewModel() {
 
     //...
@@ -26,7 +25,7 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            searchHistoryRepository.getHistoryRequests().collect { history ->
+            searchHistoryPreferences.getEntries().collect { history ->
                 _searchHistory.value = history
             }
         }
@@ -39,7 +38,7 @@ class SearchViewModel(
                 val list =
                     tracksRepository.searchTracks(TracksSearchRequest(expression = expression))
                 if (expression.isNotBlank() && list.isNotEmpty()) {
-                    searchHistoryRepository.addToHistory(expression)
+                    searchHistoryPreferences.addEntry(expression)
                 }
                 _allTracksScreenState.update { SearchState.Success(foundList = list) }
             } catch (e: IOException) {
@@ -49,7 +48,6 @@ class SearchViewModel(
     }
 
     fun resetState() {
-        Log.d("ResetState", "reseted")
         _allTracksScreenState.update { SearchState.Initial(history = _searchHistory.value) }
     }
 }
