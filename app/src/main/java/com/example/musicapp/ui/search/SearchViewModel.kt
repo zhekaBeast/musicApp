@@ -8,6 +8,7 @@ import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -26,6 +27,7 @@ class SearchViewModel(
     init {
         viewModelScope.launch {
             searchHistoryPreferences.getEntries().collect { history ->
+                val history = searchHistoryPreferences.getEntries().first()
                 _searchHistory.value = history
             }
         }

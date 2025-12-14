@@ -174,6 +174,7 @@ private  fun HistoryRequests(
 ) {
     LazyColumn(
         modifier = Modifier
+            .padding(top= 8.dp)
             .fillMaxWidth()
             .heightIn(max = 200.dp)
             .border(

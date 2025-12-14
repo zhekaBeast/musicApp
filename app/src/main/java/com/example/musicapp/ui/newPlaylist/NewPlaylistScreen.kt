@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -122,6 +123,7 @@ private fun Form(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
                 .fillMaxWidth()
                 .aspectRatio(1f)
                 .clickable {
@@ -180,7 +182,7 @@ private fun Form(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(vertical = 16.dp),
             //singleLine = true,
             placeholder = {
                 Text(
