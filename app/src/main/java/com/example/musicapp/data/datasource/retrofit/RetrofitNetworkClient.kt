@@ -1,8 +1,8 @@
 package com.example.musicapp.data.network
 
+import com.example.musicapp.data.NetworkClient
 import com.example.musicapp.data.datasource.dto.BaseResponse
 import com.example.musicapp.data.datasource.dto.TracksSearchResponse
-import com.example.musicapp.domain.NetworkClient
 import com.example.musicapp.domain.models.TracksSearchRequest
 import retrofit2.http.GET
 import retrofit2.http.Query

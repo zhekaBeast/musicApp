@@ -1,6 +1,6 @@
 package com.example.musicapp.domain.repository
 
-import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.domain.models.Playlist
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistsRepository {
@@ -13,5 +13,4 @@ interface PlaylistsRepository {
 
     suspend fun deleteSongFromPlaylist(trackId: Long, playlistId: Long)
 
-    suspend fun updatePlaylist(newPlaylist: Playlist)
 }

@@ -1,6 +1,5 @@
 package com.example.musicapp.ui.playlists
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,14 +26,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapp.R
-import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.domain.models.Playlist
+import com.example.musicapp.ui.components.common.UriPicture
 import com.example.musicapp.ui.navigation.AppScreen
 import com.example.musicapp.ui.navigation.RouteCreator
 import org.koin.compose.koinInject
@@ -113,12 +111,9 @@ private fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Image(
-            modifier = Modifier.size(48.dp),
-            painter = painterResource(id = R.drawable.library_light),
-            contentDescription = playlist.name,
-            colorFilter = ColorFilter.tint(Color.Gray)
-        )
+        Box(Modifier.size(48.dp).padding(4.dp)) {
+            UriPicture(playlist.coverImageUri)
+        }
         Column(
             modifier = Modifier
                 .weight(1f)

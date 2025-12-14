@@ -42,4 +42,6 @@
     <string name="empty_playlist">Плейлист пуст!</string>
     <string name="track_added">Трек добавлен</string>
     <string name="playlist_cover">Обложка плейлиста</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="cover">Обложка</string>
 </resources>

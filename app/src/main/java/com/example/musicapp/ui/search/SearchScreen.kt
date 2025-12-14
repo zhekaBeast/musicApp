@@ -66,7 +66,7 @@ private  fun SearchScreenContent(
     resetSearchState: () -> Unit, navController: NavController,
     searchHistory: List<String>
 ) {
-    Column() {
+    Column(Modifier.padding(16.dp)) {
         SearchTextField(
             fetchSearchSong,
             resetSearchState,
@@ -113,7 +113,7 @@ private  fun SearchTextField(
             fetchSearchSong(text)
         }
     }
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()

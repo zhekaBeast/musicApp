@@ -40,17 +40,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
-import coil.compose.AsyncImage
 import com.example.musicapp.R
-import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.domain.models.Playlist
 import com.example.musicapp.domain.models.Track
 import com.example.musicapp.ui.components.common.DisplayError
+import com.example.musicapp.ui.components.common.UriPicture
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
@@ -92,10 +90,10 @@ private fun TrackDetailsScreenContent(
         delay(500)
         loadTrack(trackId)
     }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.Center) {
         when (val state = trackDetailsState) {
             is TrackState.Error -> {
-                DisplayError.displayErrorScreen(state.error)
+                DisplayError.DisplayErrorScreen(state.error)
             }
 
             TrackState.Loading -> {
@@ -124,7 +122,7 @@ private fun TrackDetailsScreenContent(
             ) {
                 when (val state = playlistsState) {
                     is PlaylistsState.Error -> {
-                        DisplayError.displayErrorScreen(state.message)
+                        DisplayError.DisplayErrorScreen(state.message)
                     }
 
                     PlaylistsState.Loading -> {
@@ -158,24 +156,13 @@ private fun TrackDetails(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 32.dp, start = 16.dp, end = 16.dp),
     ) {
-        Box(
-            contentAlignment = Alignment.Center, modifier = Modifier
-                .weight(3f)
-                .fillMaxWidth()
-        ) {
-            Image(
-                modifier = Modifier.size(48.dp),
-                painter = painterResource(id = R.drawable.library_light),
-                contentDescription = stringResource(R.string.playlist_name),
-                colorFilter = ColorFilter.tint(Color.Gray)
-            )
-        }
+        UriPicture(track.pictureUrl)
         Column(
             modifier = Modifier
                 .weight(5f)
                 .fillMaxWidth()
+                .padding(top=16.dp)
         ) {
             Text(track.trackName, fontSize = 22.sp)
             Text(track.artistName, fontSize = 14.sp)
@@ -303,22 +290,8 @@ private fun PlaylistListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(modifier = Modifier.size(205.dp)) {
-            if (playlist.coverImageUri != null) {
-                AsyncImage(
-                    model = playlist.coverImageUri.toUri(),
-                    contentDescription = stringResource(R.string.playlist_cover),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Image(
-                    modifier = Modifier.size(48.dp),
-                    painter = painterResource(id = R.drawable.library_light),
-                    contentDescription = playlist.name,
-                    colorFilter = ColorFilter.tint(Color.Gray)
-                )
-            }
+        Box(Modifier.size(48.dp).padding(4.dp)) {
+            UriPicture(playlist.coverImageUri)
         }
         Column(
             modifier = Modifier

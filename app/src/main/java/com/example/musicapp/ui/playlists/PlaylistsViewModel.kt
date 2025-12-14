@@ -2,7 +2,7 @@ package com.example.musicapp.ui.playlists
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.domain.models.Playlist
 import com.example.musicapp.domain.repository.PlaylistsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

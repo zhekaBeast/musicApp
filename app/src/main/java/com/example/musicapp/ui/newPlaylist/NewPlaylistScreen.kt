@@ -2,6 +2,7 @@ package com.example.musicapp.ui.newPlaylist
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -12,6 +13,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -99,10 +101,16 @@ private fun Form(
     val context = LocalContext.current
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
-        // Обработка результата выбора изображения
         uri?.let {
+            try {
+                context.contentResolver.takePersistableUriPermission(
+                    it,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (_: SecurityException) {
+            }
             setImageURI(it.toString())
         }
     }
@@ -111,7 +119,7 @@ private fun Form(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            imagePickerLauncher.launch("image/*")
+            imagePickerLauncher.launch(arrayOf("image/*"))
         }
     }
 
@@ -127,16 +135,15 @@ private fun Form(
                 .fillMaxWidth()
                 .aspectRatio(1f)
                 .clickable {
-                    // Для Android 13+ (API 33+) разрешения не нужны для выбора изображений
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        imagePickerLauncher.launch("image/*")
+                        imagePickerLauncher.launch(arrayOf("image/*"))
                     } else {
                         when {
                             ContextCompat.checkSelfPermission(
                                 context,
                                 Manifest.permission.READ_EXTERNAL_STORAGE
                             ) == PackageManager.PERMISSION_GRANTED -> {
-                                imagePickerLauncher.launch("image/*")
+                                imagePickerLauncher.launch(arrayOf("image/*"))
                             }
 
                             else -> {
@@ -180,10 +187,9 @@ private fun Form(
         }
         OutlinedTextField(
             modifier = Modifier
-                .weight(1f)
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
-            //singleLine = true,
+            singleLine = true,
             placeholder = {
                 Text(
                     stringResource(R.string.playlist_description),
@@ -194,6 +200,7 @@ private fun Form(
             value = playlistDescription,
             onValueChange = { playlistDescription = it }
         )
+        Spacer(Modifier.weight(1f))
         Button(
             modifier = Modifier
                 .fillMaxWidth(),

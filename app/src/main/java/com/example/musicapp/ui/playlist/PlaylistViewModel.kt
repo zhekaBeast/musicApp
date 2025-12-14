@@ -2,10 +2,11 @@ package com.example.musicapp.ui.playlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.domain.models.Playlist
 import com.example.musicapp.domain.models.Track
 import com.example.musicapp.domain.repository.PlaylistsRepository
 import com.example.musicapp.domain.repository.TracksRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -23,7 +24,7 @@ class PlaylistViewModel(
 
 
     fun loadPlaylistWithTracks(playlistId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 _playlistWithTracksState.update { PlaylistWithTracksState.Loading }
 
@@ -56,30 +57,10 @@ class PlaylistViewModel(
         }
     }
 
-    fun updatePlaylist(name: String, description: String) {
-        val currentState = _playlistWithTracksState.value
-        if (currentState is PlaylistWithTracksState.Loaded) {
-            viewModelScope.launch {
-                try {
-                    val updatedPlaylist = currentState.playlistWithTracks.playlist.copy(
-                        name = name,
-                        description = description
-                    )
-                    playlistsRepository.updatePlaylist(updatedPlaylist)
-                    _playlistWithTracksState.update {
-                        PlaylistWithTracksState.Loaded(currentState.playlistWithTracks.copy(playlist = updatedPlaylist))
-                    }
-                } catch (e: Exception) {
-                    _playlistWithTracksState.update { PlaylistWithTracksState.Error(e.message.toString()) }
-                }
-            }
-        }
-    }
-
     fun deletePlaylist() {
         val currentState = _playlistWithTracksState.value
         if (currentState is PlaylistWithTracksState.Loaded) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     playlistsRepository.deletePlaylistById(currentState.playlistWithTracks.playlist.id)
                 } catch (e: Exception) {

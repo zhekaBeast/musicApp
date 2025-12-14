@@ -17,7 +17,7 @@ object DisplayError{
         Toast.makeText(context, "Error: $error", Toast.LENGTH_LONG).show()
     }
     @Composable
-    fun displayErrorScreen(error: String, onReload:(()->Unit)? = null){
+    fun DisplayErrorScreen(error: String, onReload:(()->Unit)? = null){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column {
                 Text("Ошибка: $error", color = Color.Red)

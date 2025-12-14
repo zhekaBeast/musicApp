@@ -1,9 +1,10 @@
 package com.example.musicapp.data.repository
 
-import com.example.musicapp.data.database.dao.TracksDao
-import com.example.musicapp.data.database.entity.TrackEntity
+import com.example.musicapp.data.NetworkClient
+import com.example.musicapp.data.datasource.database.dao.TracksDao
+import com.example.musicapp.data.datasource.database.entity.TrackEntity
+import com.example.musicapp.data.datasource.database.entity.toDomain
 import com.example.musicapp.data.datasource.dto.TracksSearchResponse
-import com.example.musicapp.domain.NetworkClient
 import com.example.musicapp.domain.models.Track
 import com.example.musicapp.domain.models.TracksSearchRequest
 import com.example.musicapp.domain.repository.TracksRepository
@@ -61,18 +62,5 @@ class TracksRepositoryImpl(
         return updated.toDomain()
     }
 
-    private fun TrackEntity.toDomain(): Track {
-        val seconds = trackTimeMillis / 1000
-        val minutes = seconds / 60
-        val trackTime = "%02d".format(minutes) + ":" + "%02d".format(seconds % 60)
-        return Track(
-            id = id,
-            trackName = trackName,
-            artistName = artistName,
-            trackTime = trackTime,
-            trackTimeMillis = trackTimeMillis,
-            favorite = favorite
-        )
-    }
 }
 

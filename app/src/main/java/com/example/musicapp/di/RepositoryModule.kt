@@ -1,14 +1,12 @@
 package com.example.musicapp.di
 
 import androidx.room.Room
-import com.example.musicapp.data.database.AppDatabase
+import com.example.musicapp.data.NetworkClient
+import com.example.musicapp.data.datasource.database.AppDatabase
 import com.example.musicapp.data.network.ITunesApiService
 import com.example.musicapp.data.network.RetrofitNetworkClient
-import com.example.musicapp.data.repository.FavoriteRepositoryImpl
 import com.example.musicapp.data.repository.PlaylistsRepositoryImpl
 import com.example.musicapp.data.repository.TracksRepositoryImpl
-import com.example.musicapp.domain.NetworkClient
-import com.example.musicapp.domain.repository.FavoriteRepository
 import com.example.musicapp.domain.repository.PlaylistsRepository
 import com.example.musicapp.domain.repository.TracksRepository
 import org.koin.android.ext.koin.androidContext
@@ -18,7 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val repositoryModule = module {
 
-    // Room database
     single<AppDatabase> {
         Room.databaseBuilder(
             androidContext(),
@@ -49,8 +46,7 @@ val repositoryModule = module {
     single<NetworkClient> {
         RetrofitNetworkClient(get())
     }
-
-    // Repositories
+    
     single<TracksRepository> {
         TracksRepositoryImpl(get(), get())
     }
@@ -59,7 +55,4 @@ val repositoryModule = module {
         PlaylistsRepositoryImpl(get())
     }
 
-    single<FavoriteRepository> {
-        FavoriteRepositoryImpl(get())
-    }
 }

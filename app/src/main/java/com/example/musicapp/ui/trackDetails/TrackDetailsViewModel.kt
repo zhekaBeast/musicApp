@@ -2,10 +2,11 @@ package com.example.musicapp.ui.trackDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapp.data.datasource.dto.Playlist
+import com.example.musicapp.domain.models.Playlist
 import com.example.musicapp.domain.models.Track
 import com.example.musicapp.domain.repository.PlaylistsRepository
 import com.example.musicapp.domain.repository.TracksRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +23,7 @@ class TrackDetailsViewModel(
     val trackState = _trackState.asStateFlow()
     val playlistsState = _playlistsState.asStateFlow()
     fun loadTrack(trackId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val track = tracksRepository.getTrackById(trackId)
                 if (track == null) {
@@ -54,7 +55,7 @@ class TrackDetailsViewModel(
     fun toggleFavorite() {
         val currentState = _trackState.value
         if (currentState is TrackState.Success) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     _trackState.update { TrackState.Loading }
                     val updatedTrack = tracksRepository.updateFavoriteStatus(
