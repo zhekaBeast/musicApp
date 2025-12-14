@@ -23,6 +23,7 @@ fun TrackList(
     navController: NavController,
     onItemLongClick: (Track) -> Unit = {}
 ) {
+
     if (tracks.isEmpty()) {
         Box(
             modifier = Modifier.Companion.fillMaxSize(),
