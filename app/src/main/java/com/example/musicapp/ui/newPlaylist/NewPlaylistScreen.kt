@@ -1,8 +1,15 @@
 package com.example.musicapp.ui.newPlaylist
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,11 +31,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.musicapp.R
 import com.example.musicapp.ui.components.common.DisplayError
 import org.koin.compose.koinInject
@@ -38,11 +49,14 @@ import org.koin.compose.koinInject
 fun NewPlaylistScreen(navController: NavController) {
     val vm: NewPlaylistViewModel = koinInject()
     val state by vm.newPlaylistState.collectAsState()
+    val coverImageUri by vm.coverImageUri.collectAsState()
     NewPlaylistContent(
         createPlaylist = vm::createNewPlayList,
         navController,
         state,
-        LocalContext.current
+        LocalContext.current,
+        coverImageUri,
+        vm::setCoverImageUri
     )
 }
 
@@ -51,13 +65,15 @@ private fun NewPlaylistContent(
     createPlaylist: (playlistName: String, playlistDescription: String) -> Unit,
     navController: NavController,
     newPlaylistState: NewPlaylistState,
-    context: Context
+    context: Context,
+    coverImage: String?,
+    setImageURI: (String) -> Unit,
 ) {
 
     when (val state = newPlaylistState) {
         is NewPlaylistState.Error -> DisplayError.displayToastError(context, state.error)
         NewPlaylistState.Initial -> {
-            Form(createPlaylist)
+            Form(createPlaylist, coverImage, setImageURI)
         }
 
         NewPlaylistState.Loading,
@@ -71,25 +87,78 @@ private fun NewPlaylistContent(
 }
 
 @Composable
-private fun Form(onClick: (String, String) -> Unit) {
+private fun Form(
+    onClick: (String, String) -> Unit,
+    coverImageUri: String?,
+    setImageURI: (String) -> Unit
+) {
     var playlistName by remember { mutableStateOf("") }
     var playlistDescription by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        // Обработка результата выбора изображения
+        uri?.let {
+            setImageURI(it.toString())
+        }
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            imagePickerLauncher.launch("image/*")
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+
+    ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .weight(5f)
                 .fillMaxWidth()
+                .clickable {
+                    // Для Android 13+ (API 33+) разрешения не нужны для выбора изображений
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        imagePickerLauncher.launch("image/*")
+                    } else {
+                        when {
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                            ) == PackageManager.PERMISSION_GRANTED -> {
+                                imagePickerLauncher.launch("image/*")
+                            }
+
+                            else -> {
+                                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            }
+                        }
+                    }
+                }
         ) {
+            if(coverImageUri === null){
             Image(
                 modifier = Modifier.size(48.dp),
                 painter = painterResource(id = R.drawable.library_light),
                 contentDescription = stringResource(R.string.playlist_name),
                 colorFilter = ColorFilter.tint(Color.Gray)
             )
+            } else {
+                AsyncImage(
+                    model = coverImageUri.toUri(),
+                    contentDescription = stringResource(R.string.playlist_name),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
         Box(modifier = Modifier.weight(1f)) {
             OutlinedTextField(
@@ -137,3 +206,5 @@ private fun Form(onClick: (String, String) -> Unit) {
         }
     }
 }
+
+

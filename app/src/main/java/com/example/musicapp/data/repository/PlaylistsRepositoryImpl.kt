@@ -16,7 +16,7 @@ class PlaylistsRepositoryImpl(
         return db.getAllPlaylists()
     }
 
-    override suspend fun addNewPlaylist(name: String, description: String) {
+    override suspend fun addNewPlaylist(name: String, description: String, imageUri: String?) {
         db.addNewPlaylist(name, description)
     }
 

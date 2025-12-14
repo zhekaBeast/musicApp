@@ -35,9 +35,11 @@
     <string name="playlist_created">Плейлист создан</string>
     <string name="duration">Длительность</string>
     <string name="loading">Загрузка</string>
-    <string name="add_to_playlist">Добавить в плейлист\n</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
     <string name="minutes">минут</string>
     <string name="tracks">треков</string>
     <string name="empty_favorites">Ваша медиатека пуста</string>
     <string name="empty_playlist">Плейлист пуст!</string>
+    <string name="track_added">Трек добавлен</string>
+    <string name="playlist_cover">Обложка плейлиста</string>
 </resources>

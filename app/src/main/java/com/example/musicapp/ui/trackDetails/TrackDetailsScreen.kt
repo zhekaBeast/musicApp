@@ -40,10 +40,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import coil.compose.AsyncImage
 import com.example.musicapp.R
 import com.example.musicapp.data.datasource.dto.Playlist
 import com.example.musicapp.domain.models.Track
@@ -279,7 +282,6 @@ private fun PlaylistsOption(
     }
 }
 
-
 @Composable
 private fun PlaylistListItem(
     playlist: Playlist,
@@ -301,12 +303,23 @@ private fun PlaylistListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Image(
-            modifier = Modifier.size(48.dp),
-            painter = painterResource(id = R.drawable.library_light),
-            contentDescription = playlist.name,
-            colorFilter = ColorFilter.tint(Color.Gray)
-        )
+        Box(modifier = Modifier.size(205.dp)) {
+            if (playlist.coverImageUri != null) {
+                AsyncImage(
+                    model = playlist.coverImageUri.toUri(),
+                    contentDescription = stringResource(R.string.playlist_cover),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Image(
+                    modifier = Modifier.size(48.dp),
+                    painter = painterResource(id = R.drawable.library_light),
+                    contentDescription = playlist.name,
+                    colorFilter = ColorFilter.tint(Color.Gray)
+                )
+            }
+        }
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -323,7 +336,7 @@ private fun PlaylistListItem(
         if (isTrackInPlaylist) {
             Icon(
                 imageVector = Icons.Default.Check,
-                contentDescription = stringResource(R.string.add_to_playlist),
+                contentDescription = stringResource(R.string.track_added),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .size(32.dp)
