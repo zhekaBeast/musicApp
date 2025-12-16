@@ -9,75 +9,38 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.musicapp.R
 
-object RouteCreator {
-    fun createTrackDetailsRoute(trackId: Long) = "trackDetails/$trackId"
-    fun createPlaylistRoute(playlistId: Long) = "playlist/$playlistId"
-}
-
 enum class AppScreen(
     val route: String,
     val icon: ImageVector,
-    val titleId: Int,
-    val showTitle: Boolean
+    val titleId: Int
 ) {
-
     Home(
         route = "home",
         icon = Icons.Default.Home,
-        titleId = R.string.home,
-        showTitle = true
+        titleId = R.string.home
     ),
     Playlists(
-        route = "playlists",
+        route = "Playlists",
         icon = Icons.Default.LibraryMusic,
-        titleId = R.string.playlists,
-        showTitle = true
+        titleId = R.string.playlists
     ),
     Settings(
         route = "settings",
         icon = Icons.Default.Settings,
-        titleId = R.string.settings,
-        showTitle = true
+        titleId = R.string.settings
 
     ),
     Search(
         route = "search",
         icon = Icons.Default.Search,
-        titleId = R.string.search,
-        showTitle = true
+        titleId = R.string.search
 
     ),
     Favorite(
         route = "favorite",
         icon = Icons.Default.Favorite,
-        titleId = R.string.favorite,
-        showTitle = true
-    ),
-    NewPlaylist(
-        route = "newPlaylist",
-        icon = Icons.Default.Home,
-        titleId = R.string.new_playlist,
-        showTitle = true
-    ),
+        titleId = R.string.favorite
 
-    Playlist(
-        route = "playlist/{playlistId}",
-        icon = Icons.Default.Home,
-        titleId = R.string.home,
-        showTitle = false
-    ),
-
-    TrackDetails(
-        route = "trackDetails/{trackId}",
-        icon = Icons.Default.Home,
-        titleId = R.string.home,
-        showTitle = false
-    ),
-
-    Null(
-        route = "",
-        icon = Icons.Default.Home,
-        titleId = R.string.home,
-        showTitle = false
     )
+
 }

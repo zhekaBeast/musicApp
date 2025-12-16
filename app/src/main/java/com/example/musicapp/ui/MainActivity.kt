@@ -11,13 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.musicapp.ui.components.navigation.TopBar
 import com.example.musicapp.ui.navigation.NavGraph
+import com.example.musicapp.ui.theme.MusicAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainContainer()
+            MusicAppTheme {
+                MainContainer()
+            }
         }
     }
 }
@@ -30,10 +33,10 @@ fun MainContainer() {
             TopBar(navController)
         }
     ) { innerPadding ->
-        NavGraph(
-            modifier = Modifier.padding(innerPadding),
-            navController,
-        )
+            NavGraph(
+                modifier = Modifier.padding(innerPadding),
+                navController,
+            )
     }
 }
 

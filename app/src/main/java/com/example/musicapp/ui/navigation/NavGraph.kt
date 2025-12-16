@@ -11,18 +11,14 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.musicapp.ui.favorite.FavoriteScreen
 import com.example.musicapp.ui.home.HomeScreen
-import com.example.musicapp.ui.newPlaylist.NewPlaylistScreen
-import com.example.musicapp.ui.playlist.PlaylistScreen
 import com.example.musicapp.ui.playlists.PlaylistsScreen
 import com.example.musicapp.ui.search.SearchScreen
 import com.example.musicapp.ui.settings.SettingsScreen
-import com.example.musicapp.ui.trackDetails.TrackDetailsScreen
 
 
 @Composable
@@ -42,16 +38,14 @@ private fun EnterAnimation(content: @Composable () -> Unit) {
         content()
     }
 }
-
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,
-    navHostController: NavHostController,
+    navController: NavHostController,
     startDestination: String = AppScreen.Home.route
 ) {
-    val navController: NavController = navHostController
     NavHost(
-        navController = navHostController,
+        navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
@@ -79,7 +73,7 @@ fun NavGraph(
         composable(
             route = AppScreen.Favorite.route,
 
-            ) {
+        ) {
             EnterAnimation {
                 FavoriteScreen(navController)
             }
@@ -93,33 +87,5 @@ fun NavGraph(
             }
         }
 
-        composable(
-            route = AppScreen.NewPlaylist.route
-        ) {
-            EnterAnimation {
-                NewPlaylistScreen(navController)
-            }
-        }
-
-        composable(
-            route = AppScreen.Playlist.route
-        ) { navBackStackEntry ->
-            val playlistId = navBackStackEntry.arguments?.getString("playlistId")
-            EnterAnimation {
-                PlaylistScreen(
-                    playlistId = playlistId?.toLongOrNull() ?: -1,
-                    navController = navController
-                )
-            }
-        }
-
-        composable(
-            route = AppScreen.TrackDetails.route
-        ) { navBackStackEntry ->
-            val trackId = navBackStackEntry.arguments?.getString("trackId")
-            EnterAnimation {
-                TrackDetailsScreen(trackId = trackId?.toLongOrNull() ?: -1)
-            }
-        }
     }
 }

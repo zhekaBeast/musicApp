@@ -1,4 +1,4 @@
-package com.example.musicapp.data.datasource.dto
+package com.example.musicapp.data.dto
 
 open class BaseResponse (
     var resultCode: Int = 0
