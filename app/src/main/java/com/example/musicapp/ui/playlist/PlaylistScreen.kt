@@ -1,6 +1,7 @@
 package com.example.musicapp.ui.playlist
 
 import android.R.attr.text
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -125,6 +126,11 @@ private fun PlaylistDetails(
     playlistWithTracks: PlaylistWithTracks,
     onDelete: () -> Unit
 ) {
+    val tracksCount = playlistWithTracks.tracks.size
+    val tracksWord = stringResource(R.string.tracks) // Здесь вызываем composable
+    val tracksText = remember(tracksCount) {
+        "$tracksCount $tracksWord"
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,7 +146,7 @@ private fun PlaylistDetails(
                     .fillMaxWidth()
                     .padding(top = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.End
+                horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = onDelete) {
                     Icon(
@@ -151,12 +157,12 @@ private fun PlaylistDetails(
             }
             Row {
                 Text(
-                    "${playlistWithTracks.totalDuration} " + stringResource(R.string.minutes),
+                    tracksText,
                     fontSize = 14.sp
                 )
                 Spacer(Modifier.width(16.dp))
                 Text(
-                    "${playlistWithTracks.tracks.size} " + stringResource(R.string.tracks),
+                    tracksText,
                     fontSize = 14.sp
                 )
             }

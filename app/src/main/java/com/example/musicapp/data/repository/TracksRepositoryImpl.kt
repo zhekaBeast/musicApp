@@ -10,6 +10,7 @@ import com.example.musicapp.domain.models.TracksSearchRequest
 import com.example.musicapp.domain.repository.TracksRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -18,13 +19,16 @@ class TracksRepositoryImpl(
 
     override suspend fun searchTracks(request: TracksSearchRequest): List<Track> {
         val response = networkClient.doRequest(request)
-        if (response.resultCode != 200 || response !is TracksSearchResponse) {
-            return emptyList()
+        if (response.resultCode != 200) {
+            throw IOException("Server error, resultCode=${response.resultCode}")
         }
+
+        val tracksResponse = response as? TracksSearchResponse
+            ?: throw IOException("Invalid server response")
 
         val result = mutableListOf<Track>()
 
-        response.results.forEach { dto ->
+        tracksResponse.results.forEach { dto ->
             // Preserve favorite flag from local DB if present
             val existing = tracksDao.getTrackById(dto.id)
             val favorite = existing?.favorite ?: false

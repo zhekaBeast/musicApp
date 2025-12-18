@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,7 +26,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.musicapp.R
 import com.example.musicapp.ui.components.common.TrackList
-import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 
 @Composable
@@ -61,22 +60,44 @@ fun SearchScreen(navController: NavController) {
 }
 
 @Composable
-private  fun SearchScreenContent(
+private fun SearchScreenContent(
     fetchSearchSong: (String) -> Unit, searchState: SearchState,
     resetSearchState: () -> Unit, navController: NavController,
     searchHistory: List<String>
 ) {
+    var lastQuery by remember { mutableStateOf<String?>(null) }
+
     Column(Modifier.padding(16.dp)) {
         SearchTextField(
-            fetchSearchSong,
-            resetSearchState,
-            searchHistory
+            onSearch = { query ->
+                if (query.isNotBlank()) {
+                    lastQuery = query
+                    fetchSearchSong(query)
+                } else {
+                    resetSearchState()
+                }
+            },
+            resetSearchState = resetSearchState,
+            searchHistory = searchHistory
         )
         when (val state = searchState) {
             is SearchState.Error -> {
-                val error = state.error
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Ошибка: $error", color = Color.Red)
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Ошибка сервера: ${state.error}", color = Color.Red)
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                        Button(
+                            onClick = {
+                                lastQuery?.let { fetchSearchSong(it) }
+                            },
+                            enabled = lastQuery != null
+                        ) {
+                            Text("Обновить")
+                        }
+                    }
                 }
             }
 
@@ -97,22 +118,14 @@ private  fun SearchScreenContent(
 }
 
 @Composable
-private  fun SearchTextField(
-    fetchSearchSong: (String) -> Unit,
+private fun SearchTextField(
+    onSearch: (String) -> Unit,
     resetSearchState: () -> Unit,
     searchHistory: List<String>
 ) {
     var isFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     var text by remember { mutableStateOf("") }
-    LaunchedEffect(text) {
-        delay(500)
-        if (text.isBlank()) {
-            resetSearchState()
-        } else {
-            fetchSearchSong(text)
-        }
-    }
     Column(modifier = Modifier) {
         OutlinedTextField(
             modifier = Modifier
@@ -135,11 +148,16 @@ private  fun SearchTextField(
                 resetSearchState()
             },
             leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = stringResource(R.string.search),
-                    modifier = Modifier.alpha(0.7f)
-                )
+                IconButton(
+                    onClick = { onSearch(text) },
+                    enabled = text.isNotBlank()
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = stringResource(R.string.search),
+                        modifier = Modifier.alpha(0.7f)
+                    )
+                }
             },
             trailingIcon = {
                 if (text != "")
