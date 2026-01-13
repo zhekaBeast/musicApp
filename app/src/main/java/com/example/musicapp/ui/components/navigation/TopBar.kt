@@ -28,45 +28,49 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.musicapp.R
 import com.example.musicapp.ui.navigation.AppScreen
 
+
 @Composable
 fun TopBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    if (currentDestination?.route == AppScreen.Home.route) {
-        EnterAnimation {
+    when(currentDestination?.route){
+        AppScreen.Home.route->{
+            EnterAnimation {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .background(color = Color.Blue)
+                        .padding(top = 16.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.AppName), modifier = Modifier
+                            .padding(start = 24.dp)
+                            .align(Alignment.CenterVertically),
+                        style = TextStyle(
+                            fontSize = 22.sp,
+                            color = Color.White
+                        )
+
+                    )
+                }
+            }
+        }
+        else -> {
+            val appScreen = when (currentDestination?.route) {
+                AppScreen.Search.route -> AppScreen.Search
+                AppScreen.Settings.route -> AppScreen.Settings
+                AppScreen.Playlists.route -> AppScreen.Playlists
+                AppScreen.Favorite.route -> AppScreen.Favorite
+                AppScreen.NewPlaylist.route -> AppScreen.NewPlaylist
+                else -> AppScreen.Null
+            }
+            EnterAnimation {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp)
-                    .background(color = Color.Blue)
-                    .padding(top = 16.dp)
-            ) {
-                Text(
-                    stringResource(R.string.AppName), modifier = Modifier
-                        .padding(start = 24.dp)
-                        .align(Alignment.CenterVertically),
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        color = Color.White
-                    )
-
-                )
-            }
-        }
-    } else {
-
-        val appScreen = when (currentDestination?.route) {
-            AppScreen.Settings.route -> AppScreen.Settings
-            AppScreen.Search.route -> AppScreen.Search
-            else -> AppScreen.Settings
-        }
-
-        EnterAnimation {
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
                     .padding(top = 16.dp)
             ) {
                 IconButton(
@@ -75,21 +79,24 @@ fun TopBar(navController: NavHostController) {
                     }) {
                     Icon(
                         tint = Color.Black,
-                        contentDescription = stringResource(appScreen.titleId),
+                        contentDescription = stringResource(R.string.back),
                         imageVector = Icons.Default.ArrowBack
                     )
                 }
-                Text(
-                    stringResource(appScreen.titleId), style = TextStyle(fontSize = 22.sp),
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                        .padding(vertical = 10.dp)
-                )
+                if(appScreen.showTitle) {
+                    Text(
+                        stringResource(appScreen.titleId), style = TextStyle(fontSize = 22.sp),
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
             }
+            }
+
         }
     }
 }
-
 
 @Composable
 private fun EnterAnimation(content: @Composable () -> Unit) {
